@@ -1,0 +1,25 @@
+{
+  "homeheaderimage": ["/img/img1.png", "/img/img4.png", "/img/img3.png"],
+  "sizes": [
+    {
+      "label": "XS",
+      "value": "xs"
+    },
+    {
+      "label": "S",
+      "value": "s"
+    },
+    {
+      "label": "M",
+      "value": "m"
+    },
+    {
+      "label": "L",
+      "value": "l"
+    },
+    {
+      "label": "XL",
+      "value": "xl"
+    }
+  ]
+}

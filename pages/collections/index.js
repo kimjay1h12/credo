@@ -1,0 +1,175 @@
+import { makeStyles } from "@mui/styles";
+import React from "react";
+import MainLayout from "../../layouts/Mainlayouts";
+import {
+  Button,
+  ButtonBase,
+  Grid,
+  Hidden,
+  Menu,
+  MenuItem,
+  Typography,
+} from "@mui/material";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import ProductsItem from "../../components/Products/ProductsItem";
+const useStyles = makeStyles({
+  root: {},
+  row: {
+    display: "flex",
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  wrapper: {
+    marginBottom: 30,
+    marginTop: 40,
+    display: "flex",
+    flexWrap: "wrap",
+  },
+  header: {
+    color: "#fff",
+    paddingTop: 30,
+    backgroundImage: `url("/img/collectionmv.png")`,
+    backgroundRepeat: "no-repeat",
+    backgroundSize: "cover",
+    padding: 15,
+    minHeight: "70vh",
+    ["@media (min-width : 1200px)"]: {
+      padding: 50,
+      margin: 0,
+      minHeight: "100vh",
+
+      backgroundImage: `url("/img/collectionbg.png")`,
+    },
+  },
+  center: {
+    display: "flex",
+    alignItems: "center",
+    marginTop: 30,
+    justifyContent: "center",
+  },
+  content: {
+    padding: 15,
+    ["@media (min-width : 1200px)"]: {
+      padding: 50,
+    },
+  },
+  button: {
+    height: 40,
+    width: 50,
+    display: "flex",
+    // flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    borderColor: "#000",
+    borderWidth: 0.5,
+    borderStyle: "solid",
+  },
+  headerImage: {
+    width: "40%",
+    height: "500px",
+    objectFit: "contain",
+  },
+});
+function Index() {
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const classes = useStyles();
+  return (
+    <MainLayout route={"collections"}>
+      <div className={classes.root}>
+        <div className={classes.header}>
+          <div className={classes.row}>
+            <ButtonBase
+              id="basic-button"
+              aria-controls={open ? "basic-menu" : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? "true" : undefined}
+              onClick={handleClick}
+            >
+              <Typography>Price, high to low</Typography>
+              <KeyboardArrowDownIcon />
+            </ButtonBase>
+            <div>
+              <ButtonBase
+                style={{
+                  height: 40,
+                  width: 50,
+                  display: "flex",
+                  // flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderColor: "#000",
+                  borderWidth: 0.5,
+                  borderStyle: "solid",
+                }}
+              >
+                <Typography>USD</Typography>
+                {/* <KeyboardArrowDownIcon /> */}
+              </ButtonBase>
+              <ButtonBase
+                style={{
+                  height: 40,
+                  width: 50,
+                  display: "flex",
+                  // flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderColor: "#000",
+                  borderWidth: 0.5,
+                  borderStyle: "solid",
+                  background: "#000",
+                  color: "#fff",
+                }}
+              >
+                <Typography>NGN</Typography>
+                {/* <KeyboardArrowDownIcon /> */}
+              </ButtonBase>
+            </div>
+            <Menu
+              id="basic-menu"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              MenuListProps={{
+                "aria-labelledby": "basic-button",
+              }}
+            >
+              <MenuItem onClick={handleClose}>2000</MenuItem>
+              <MenuItem onClick={handleClose}>4000</MenuItem>
+              <MenuItem onClick={handleClose}>6000</MenuItem>
+            </Menu>
+          </div>
+          {/* <Hidden smDown>
+            <img src="/img/c1.png" className={classes.headerImage} />
+          </Hidden> */}
+        </div>
+        <div>
+          <div className={classes.content}>
+            <div className={classes.wrapper}>
+              <Grid container spacing={2}>
+                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13].map((cur) => (
+                  <Grid item key={cur} sm={6} xs={6} md={3}>
+                    <ProductsItem url />
+                  </Grid>
+                ))}
+              </Grid>
+            </div>
+            <div className={classes.center}>
+              <Button variant="outlined">View More</Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </MainLayout>
+  );
+}
+
+export default Index;
