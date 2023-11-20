@@ -8,7 +8,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { Button, ButtonBase, Divider } from "@mui/material";
 import CartItem from "./CartItem";
 import { useRouter } from "next/router";
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles({
   dialogPaper: {
     position: "absolute",
     top: "-5%",
@@ -17,8 +17,8 @@ const useStyles = makeStyles((theme) => ({
     marginRight: 20,
     ["@media (min-width : 1200px)"]: {
       position: "absolute",
-      top: theme.spacing(2),
-      right: theme.spacing(2),
+      top: 20,
+      right: 20,
       maxWidth: 400,
     },
   },
@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "space-between",
     marginBottom: 10,
   },
-}));
+});
 
 const TopRightDialog = ({ open, onClose, message }) => {
   const classes = useStyles();
