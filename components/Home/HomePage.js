@@ -2,7 +2,7 @@ import React from "react";
 import MainLayout from "../../layouts/Mainlayouts";
 import { Button, Grid, TextField, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import { homeheaderimage } from "../../array.json";
+// import { homeheaderimage } from "../../array.json";
 import ProductsItem from "../Products/ProductsItem";
 import ImageGrid from "../custom/ImageGrid";
 const useStyles = makeStyles({
@@ -66,6 +66,7 @@ const useStyles = makeStyles({
     },
   },
 });
+const homeheaderimage = ["/img/img1.png", "/img/img4.png", "/img/img3.png"];
 function HomePage() {
   const classes = useStyles();
   return (

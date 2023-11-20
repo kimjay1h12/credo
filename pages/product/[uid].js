@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import MainLayout from "../../layouts/Mainlayouts";
 import { makeStyles } from "@mui/styles";
 import { Grid, ButtonBase, Typography, Button } from "@mui/material";
-import { sizes } from "../../array.json";
+// import { sizes } from "../../array.json";
 import CartQuantityButton from "../../components/custom/QuantityItems";
 import ProductsItem from "../../components/Products/ProductsItem";
 const useStyles = makeStyles({
@@ -40,7 +40,28 @@ const useStyles = makeStyles({
   },
   activesize: {},
 });
-
+const sizes = [
+  {
+    label: "XS",
+    value: "xs",
+  },
+  {
+    label: "S",
+    value: "s",
+  },
+  {
+    label: "M",
+    value: "m",
+  },
+  {
+    label: "L",
+    value: "l",
+  },
+  {
+    label: "XL",
+    value: "xl",
+  },
+];
 function Index() {
   const [quantity, setQuantity] = useState(0);
   const [selectedSize, setSelectedSize] = useState("xs");
