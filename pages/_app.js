@@ -2,13 +2,17 @@ import { ThemeProvider } from "@mui/material";
 import "../styles/globals.css";
 import theme from "../styles/theme";
 import RouterLoader from "../components/routerLoader";
+import GlobalProvider from "../context";
 
 function MyApp({ Component, pageProps }) {
   return (
-    <ThemeProvider theme={theme}>
-      <RouterLoader />
-      <Component {...pageProps} />
-    </ThemeProvider>
+    <GlobalProvider>
+      <ThemeProvider theme={theme}>
+        <Component mapLoaded={isLoaded} {...pageProps} />
+        <RouterLoader />
+        {/* <Splashscreen /> */}
+      </ThemeProvider>
+    </GlobalProvider>
   );
 }
 
