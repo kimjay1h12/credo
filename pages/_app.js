@@ -8,7 +8,7 @@ function MyApp({ Component, pageProps }) {
   return (
     <GlobalProvider>
       <ThemeProvider theme={theme}>
-        <Component mapLoaded={isLoaded} {...pageProps} />
+        <Component {...pageProps} />
         <RouterLoader />
         {/* <Splashscreen /> */}
       </ThemeProvider>

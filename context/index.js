@@ -1,11 +1,10 @@
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useReducer } from "react";
 import client from "../api/client";
 import { getCurrentUser } from "./actions/auth";
 import { getCart } from "./actions/cart";
 import authReducer, { defaultAuth } from "./reducers/authReducer";
 import cartReducer, { defaultCart } from "./reducers/cartReducer";
 import genericReducer, { defaultData } from "./reducers/genericReducer";
-import menuReducer, { defaultMenu } from "./reducers/menuReducer";
 const genericData = {
   error: null,
   loading: false,
