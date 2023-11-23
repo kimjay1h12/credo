@@ -71,7 +71,7 @@ function Index() {
   ];
   const classes = useStyles();
   return (
-    <MiniDrawer active={"customer"}>
+    <MiniDrawer active={"analytic"}>
       <div className={classes.root}>
         <div className={classes.header}>
           <div>
