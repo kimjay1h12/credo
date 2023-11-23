@@ -1,31 +1,35 @@
-import React from "react";
+import { useContext } from "react";
 import DashBoardLayout from "../../layouts/DashBoardLayout";
 import { Grid, Typography } from "@mui/material";
 import MiniDrawer from "../../layouts/Drawer";
 import { makeStyles } from "@mui/styles";
 import DashItem from "../DashBoard/DashItem";
 import BasicTable from "../DashBoard/Table";
+import { useContext } from "react";
+import { GlobalContext } from "../../context";
 const useStyles = makeStyles({
   root: {
     padding: 20,
   },
 });
 function Dashboard() {
+  const { collectionsState, cartegoryState, customerState } =
+    useContext(GlobalContext);
   const headerArray = [
     {
-      label: "Visitors online",
+      label: "Customers",
       icon: "/img/dash.png",
-      value: "5",
+      value: customerState?.data?.length,
     },
     {
-      label: "Pages viewed",
+      label: "Collections",
       icon: "/img/dash2.png",
-      value: "12",
+      value: collectionsState?.data?.length,
     },
     {
-      label: "Total sales",
+      label: "Categories",
       icon: "/img/dash3.png",
-      value: "150",
+      value: cartegoryState?.data?.length,
     },
     {
       label: "Total orders",
