@@ -27,7 +27,7 @@ const useStyles = makeStyles({
   wrapper: {
     padding: 15,
     ["@media (min-width : 1200px)"]: {
-      padding: 50,
+      padding: 70,
     },
     marginBottom: 30,
     marginTop: 20,
@@ -141,7 +141,7 @@ function HomePage() {
         <div className={classes.wrapper}>
           <Grid container spacing={{ xs: 2, md: 6 }}>
             {getRandomItems([...data], 8)?.map((cur, i) => (
-              <Grid item key={i} sm={6} xs={6} md={2}>
+              <Grid item key={i} sm={6} xs={6} md={2.5}>
                 <ProductsItem {...cur} />
               </Grid>
             ))}
@@ -169,12 +169,21 @@ function HomePage() {
           </Grid>
         </div>
         <div className={classes.center}>
-          <Button variant="outlined" size="large">
+          <Button
+            onClick={() => {
+              router.push("/collections");
+            }}
+            variant="outlined"
+            size="large"
+          >
             Shop Collections
           </Button>
         </div>
         <div className={classes.banner}>
           <img
+            onClick={() => {
+              router.push("/collections/" + collectionsState.data[6]?.id);
+            }}
             src={collectionsState.data[6]?.image}
             className={classes.bannerimg}
           />
@@ -187,7 +196,7 @@ function HomePage() {
         <div className={classes.wrapper}>
           <Grid container spacing={{ xs: 2, md: 6 }}>
             {getRandomItems([...data], 8)?.map((cur, i) => (
-              <Grid item key={i} sm={6} xs={6} md={2}>
+              <Grid item key={i} sm={6} xs={6} md={2.5}>
                 <ProductsItem {...cur} />
               </Grid>
             ))}

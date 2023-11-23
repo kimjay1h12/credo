@@ -25,6 +25,8 @@ export const GlobalContext = React.createContext({
   collectionsDispatch: () => {},
   cartState: defaultCart,
   cartDispatch: () => {},
+  orderDispatch: () => {},
+  orderState: defaultData,
   customerState: defaultData,
   customerDispatch: () => {},
   adminProductsState: defaultData,
@@ -54,6 +56,7 @@ export default function GlobalProvider({ children }) {
     genericReducer,
     defaultData
   );
+  const [orderState, orderDispatch] = useReducer(genericReducer, defaultData);
   const [collectionsState, collectionsDispatch] = useReducer(
     genericReducer,
     defaultData
@@ -89,6 +92,8 @@ export default function GlobalProvider({ children }) {
         adminProductsDispatch,
         customerDispatch,
         customerState,
+        orderDispatch,
+        orderState,
       }}
     >
       {children}

@@ -22,7 +22,7 @@ const useStyles = makeStyles({
   root: {
     padding: 15,
     ["@media (min-width : 1200px)"]: {
-      padding: 50,
+      padding: 70,
     },
   },
   row: {
@@ -96,7 +96,7 @@ function Index() {
   return (
     <MainLayout route={"category"} loading={loading}>
       <div className={classes.root}>
-        <Typography variant="h5" fontWeight={700}>
+        <Typography variant="h5" style={{ marginBottom: 40 }} fontWeight={700}>
           Category
         </Typography>
         <div className={classes.row}>
@@ -116,22 +116,6 @@ function Index() {
             ))}
           </TextField>
           <div>
-            <ButtonBase
-              style={{
-                height: 40,
-                width: 50,
-                display: "flex",
-                // flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "center",
-                borderColor: "#000",
-                borderWidth: 0.5,
-                borderStyle: "solid",
-              }}
-            >
-              <Typography>USD</Typography>
-              {/* <KeyboardArrowDownIcon /> */}
-            </ButtonBase>
             <ButtonBase
               style={{
                 height: 40,
@@ -169,15 +153,15 @@ function Index() {
           <div className={classes.wrapper}>
             <Grid container spacing={2}>
               {products.map((cur) => (
-                <Grid item key={cur} sm={6} xs={6} md={3}>
+                <Grid item key={cur} sm={6} xs={6} md={2.5}>
                   <ProductsItem {...cur} />
                 </Grid>
               ))}
             </Grid>
           </div>
-          <div className={classes.center}>
+          {/* <div className={classes.center}>
             <Button variant="outlined">View More</Button>
-          </div>
+          </div> */}
         </div>
       </div>
     </MainLayout>

@@ -8,11 +8,18 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { UpdateOrderPayment } from "../../../context/actions/paymentAction";
 import { makeStyles } from "@mui/styles";
 import { usePaystackPayment } from "react-paystack";
 
 import CheckoutItem from "../../../components/Checkout/CheckoutItem";
 import { useRouter } from "next/router";
+import {
+  currencyFormatter,
+  generateRandomTransactionReference,
+} from "../../../utility";
+import { useContext } from "react";
+import { GlobalContext } from "../../../context";
 const useStyles = makeStyles({
   container: {
     padding: 15,
@@ -23,17 +30,38 @@ const useStyles = makeStyles({
   },
 });
 function Index() {
+  const [paymentMethod, setPaymentMethod] = useState("");
+  const { authState } = useContext(GlobalContext);
   const router = useRouter();
   const classes = useStyles();
+  const [product, setProduct] = useState({});
+  const { data } = router.query;
+  // console.log(JSON?.parse(data));
+  // const product = JSON?.parse(data);
+  useEffect(() => {
+    if (data) setProduct(JSON?.parse(data));
+  }, [data]);
+  // console.log(new Date().toString());
   const [paystackConfig, setPaystackConfig] = useState({
     // reference: new Date().getTime().toString(),
     reference: null,
-    email: "olawaleadeit@gmail.com",
-    amount: 100,
-    publicKey: "pk_test_ceaca8935383d360f0869a7a0c4a3cc992d74f73",
+    email: product?.billingInfo?.emailAddress,
+    amount: product?.amount,
+    publicKey: "pk_test_fccd6a7de236c376d5be2ae695bc1d281cff567f",
   });
+
   const initializePayment = usePaystackPayment(paystackConfig);
-  const onSuccess = (reference) => {};
+  // const [loading, setloading] = useState(second)
+  const onSuccess = async (reference) => {
+    const res = await UpdateOrderPayment(product.id, {
+      paymentMethod: paymentMethod,
+      paymentReference: reference?.trans?.toString(),
+      paymentStatus: "paid",
+    });
+    if (res) {
+      router.push("/");
+    }
+  };
   const onClose = () => {};
 
   useEffect(() => {
@@ -55,10 +83,15 @@ function Index() {
                 }}
               >
                 <div style={{ display: "flex" }}>
-                  <Radio checked />
+                  <Radio
+                    checked={paymentMethod === "payStack"}
+                    onClick={() => {
+                      setPaymentMethod("payStack");
+                    }}
+                  />
                   <div>
                     <Typography>Pay via Paystack</Typography>
-                    <Typography color={"#A2A2A2"}>
+                    <Typography variant="body2" color={"#A2A2A2"}>
                       Pay with master card & visa card
                     </Typography>
                   </div>
@@ -69,6 +102,65 @@ function Index() {
                   style={{ width: 50, height: 50 }}
                 />
               </div>
+              <Divider style={{ marginTop: 10, marginBottom: 10 }} />
+              <div
+                style={{
+                  // marginTop: 30,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                <div style={{ display: "flex" }}>
+                  <Radio
+                    checked={paymentMethod === "bitcoin"}
+                    onClick={() => {
+                      setPaymentMethod("bitcoin");
+                    }}
+                  />
+                  <div>
+                    <Typography>Pay via Cryptocurency</Typography>
+                    <Typography variant="body2" color={"#A2A2A2"}>
+                      Pay with Bitcoin, ethereum & other cryptocurrencies
+                    </Typography>
+                  </div>
+                </div>
+                <img
+                  src="/img/bitcoin.png"
+                  alt="Pay"
+                  style={{ width: 50, height: 50 }}
+                />
+              </div>
+              <Divider style={{ marginTop: 10, marginBottom: 10 }} />
+              <div
+                style={{
+                  marginTop: 30,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                <div style={{ display: "flex" }}>
+                  <Radio
+                    checked={paymentMethod === "banktransfer"}
+                    onClick={() => {
+                      setPaymentMethod("banktransfer");
+                    }}
+                  />
+                  <div>
+                    <Typography>Pay via Bank transfer</Typography>
+                    <Typography variant="body2" color={"#A2A2A2"}>
+                      Pay with your bank via transfer
+                    </Typography>
+                  </div>
+                </div>
+                <img
+                  src="/img/bank.png"
+                  alt="Pay"
+                  style={{ width: 50, height: 50 }}
+                />
+              </div>
+              <Divider style={{ marginTop: 10 }} />
             </div>
           </Grid>
           <Grid item xs={12} md={6} sm={12}>
@@ -79,7 +171,7 @@ function Index() {
               <Typography>Order Summary</Typography>
 
               <div>
-                <CheckoutItem />
+                <CheckoutItem product={product} />
                 <Divider />
                 <div>
                   <div
@@ -91,7 +183,9 @@ function Index() {
                     }}
                   >
                     <Typography color={"#6A6A6A"}>SubTotal</Typography>
-                    <Typography fontWeight={700}>$1000</Typography>
+                    <Typography fontWeight={700}>
+                      {currencyFormatter(product?.amount)}
+                    </Typography>
                   </div>
                   <div
                     style={{
@@ -103,7 +197,9 @@ function Index() {
                     }}
                   >
                     <Typography color={"#6A6A6A"}>Total</Typography>
-                    <Typography fontWeight={700}>$1010</Typography>
+                    <Typography fontWeight={700}>
+                      {currencyFormatter(product?.amount)}
+                    </Typography>
                   </div>
                 </div>
                 <Divider />
@@ -124,11 +220,38 @@ function Index() {
             size="large"
             style={{ width: 300, marginBottom: 20 }}
             variant="contained"
+            disabled={paymentMethod === ""}
             onClick={() => {
-              setPaystackConfig({
-                ...paystackConfig,
-                reference: "sdfghjkl",
-              });
+              if (paymentMethod === "payStack") {
+                setPaystackConfig({
+                  ...paystackConfig,
+                  reference: generateRandomTransactionReference(),
+                  email: product?.billingInfo?.emailAddress,
+                  amount: product?.amount * 100,
+                });
+              } else {
+                if (paymentMethod === "bitcoin") {
+                  router.push({
+                    pathname: "/checkout/bitcoin",
+                    query: {
+                      data: JSON.stringify({
+                        ...product,
+                        paymentMethod: paymentMethod,
+                      }),
+                    },
+                  });
+                } else {
+                  router.push({
+                    pathname: "/checkout/banktransfer",
+                    query: {
+                      data: JSON.stringify({
+                        ...product,
+                        paymentMethod: paymentMethod,
+                      }),
+                    },
+                  });
+                }
+              }
             }}
           >
             Pay Now

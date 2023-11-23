@@ -16,7 +16,7 @@ const useStyles = makeStyles({
   root: {
     padding: 15,
     ["@media (min-width : 1200px)"]: {
-      padding: 50,
+      padding: 70,
     },
   },
   row: {
@@ -135,15 +135,15 @@ function Index() {
           <div className={classes.wrapper}>
             <Grid container spacing={{ xs: 2, md: 6 }}>
               {data.map((cur) => (
-                <Grid item key={cur} sm={6} xs={6} md={3}>
+                <Grid item key={cur} sm={6} xs={6} md={2.5}>
                   <ProductsItem {...cur} />
                 </Grid>
               ))}
             </Grid>
           </div>
-          <div className={classes.center}>
+          {/* <div className={classes.center}>
             <Button variant="outlined">View More</Button>
-          </div>
+          </div> */}
         </div>
       </div>
     </MainLayout>

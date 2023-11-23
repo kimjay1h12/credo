@@ -3,8 +3,10 @@ import React from "react";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { makeStyles } from "@mui/styles";
+import { currencyFormatter } from "../../utility";
 const useStyles = makeStyles({});
-function CheckoutItem() {
+function CheckoutItem({ id, noOfItems, product }) {
+  console.log("ghjk", product);
   const classes = useStyles();
   return (
     <div
@@ -17,7 +19,12 @@ function CheckoutItem() {
       }}
     >
       <div style={{ display: "flex", alignItems: "flex-start", gap: 20 }}>
-        <img src="/img/test.png" style={{ width: 80, height: 80 }} />
+        {product?.pictures?.length > 0 && (
+          <img
+            src={product?.pictures[0]?.url}
+            style={{ width: 80, height: 80 }}
+          />
+        )}
         <div
           style={{
             display: "flex",
@@ -27,10 +34,10 @@ function CheckoutItem() {
           }}
         >
           <div style={{ display: "flex", alignItems: "flex-start", gap: 5 }}>
-            <Typography>Credo Shirt air Cg </Typography>
-            <Typography fontWeight={800}>x 2</Typography>
+            <Typography>{product?.title}</Typography>
+            <Typography fontWeight={800}>x {product?.noOfItems}</Typography>
           </div>
-          <Typography color={"#6A6A6A"}>Shipping Fee $10</Typography>
+          {/* <Typography color={"#6A6A6A"}>Shipping Fee --</Typography> */}
         </div>
       </div>
       <div
@@ -40,8 +47,10 @@ function CheckoutItem() {
           justifyContent: "space-between",
         }}
       >
-        <Typography fontWeight={800}>$200</Typography>
-        <Typography>$10</Typography>
+        <Typography fontWeight={800}>
+          {currencyFormatter(product?.price || product?.amount)}
+        </Typography>
+        {/* <Typography>$10</Typography> */}
       </div>
     </div>
   );

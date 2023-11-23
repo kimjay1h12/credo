@@ -97,18 +97,15 @@ function Index() {
         <div className={classes.container}>
           <Grid item xs={12} md={6} sx={{ width: "100%" }}>
             <Typography gutterBottom align="center">
-              BANK TRANSFER PAYMENT
+              CRPYTO PAYMENT
             </Typography>
             <div className={classes.content}>
               <Typography align="center" mb={3} variant="caption">
-                Make a Bank Transfer(In Nigerian NGN) of the required amount to
-                the following account: NOTE : that our conversion rate is 970NGN
-                to $1 and we will confirm all payments before processing your
-                order.
+                Make a Crypto payment (In Nigerian NGN) of the required amount
+                to the following BTC wallet NOTE we will confirm all payments
+                before processing your order.
               </Typography>
-              <Typography mt={4}>Name: Jimoh Akeem Olawale</Typography>
-              <Typography> Account Number: 9065764742</Typography>
-              <Typography>Bank Name: PalmPay</Typography>
+              <Typography mt={4}>BTC wallet : 02x345783839y53u97d</Typography>
             </div>
             <Typography mt={4}>Proof of payment</Typography>
             {imageUrl != "" && (

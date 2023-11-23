@@ -46,7 +46,7 @@ function ProductsItem({ pictures = [], title, price, id }) {
       <img src={pictures[0]?.url} className={classes.img} />
       {/* <Divider /> */}
       <Typography variant="caption" fontWeight={400}>
-        {title}
+        {title.slice(0, 20)}
         {/* {" ..."} */}
       </Typography>
       <Typography
@@ -59,7 +59,7 @@ function ProductsItem({ pictures = [], title, price, id }) {
       >
         {currencyFormatter(price)}
       </Typography>
-      <Typography
+      {/* <Typography
         color={"gray"}
         style={{ textDecorationLine: "line-through" }}
         variant="body2"
@@ -68,7 +68,7 @@ function ProductsItem({ pictures = [], title, price, id }) {
         fontWeight={600}
       >
         {currencyFormatter(price + 100)}
-      </Typography>
+      </Typography> */}
     </div>
   );
 }

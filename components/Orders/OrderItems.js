@@ -2,7 +2,8 @@ import { ButtonBase, Typography } from "@mui/material";
 import React from "react";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import RemoveIcon from "@mui/icons-material/Remove";
-function OrderItem() {
+import { currencyFormatter } from "../../utility";
+function OrderItem({ product }) {
   return (
     <div
       style={{
@@ -17,20 +18,26 @@ function OrderItem() {
       }}
     >
       <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
-        <img src="/img/test.png" style={{ width: 80, height: 80 }} />
-        <div style={{ display: "flex", alignItems: "flex-start", gap: 5 }}>
-          <Typography>Credo Shirt air Cg </Typography>
-          <Typography fontWeight={800}>x 2</Typography>
+        <img src={product?.productImage} style={{ width: 80, height: 80 }} />
+        <div
+          style={{
+            display: "flex",
+            alignItems: "flex-start",
+            gap: 5,
+            flexDirection: "column",
+            height: "100%",
+          }}
+        >
+          <Typography variant="body2">{product?.productName}</Typography>
+          <Typography fontWeight={800} variant="body2">
+            Quantity : {product?.noOfItems}
+          </Typography>
         </div>
       </div>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-        }}
-      >
-        <Typography fontWeight={800}>$200</Typography>
+      <div style={{}}>
+        <Typography variant="body2" fontWeight={800}>
+          {currencyFormatter(product?.amount)}
+        </Typography>
       </div>
     </div>
   );

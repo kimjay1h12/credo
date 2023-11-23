@@ -3,7 +3,23 @@ import React from "react";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { currencyFormatter } from "../../utility";
+import client from "../../api/client";
+import { getCart } from "../../context/actions/cart";
+import { useContext } from "react";
+import { GlobalContext } from "../../context";
 function CartItem({ id, noOfItems, product }) {
+  const { cartDispatch } = useContext(GlobalContext);
+  const RemoveItemFromCart = async () => {
+    try {
+      const res = await client.delete(`/api/v1/Cart/removeFromCart/${id}`);
+      console.log(res);
+      getCart(cartDispatch);
+      alert("Successfully removed Item from Cart");
+    } catch (error) {
+      console.log("error removing from cart", error);
+      alert("error removing from cart");
+    }
+  };
   return (
     <div
       style={{
@@ -19,10 +35,10 @@ function CartItem({ id, noOfItems, product }) {
           src={product?.pictures[0]?.url}
           style={{ width: 80, height: 80 }}
         />
-        <div style={{ display: "flex", alignItems: "flex-start", gap: 5 }}>
+        <div style={{ gap: 5 }}>
           <Typography variant="body2">{product.title}</Typography>
           <Typography fontWeight={800} variant="body2">
-            x {noOfItems}
+            Quantity {noOfItems}
           </Typography>
         </div>
       </div>
@@ -34,10 +50,14 @@ function CartItem({ id, noOfItems, product }) {
           alignItems: "flex-end",
         }}
       >
-        <Typography variant="body2" fontWeight={800}>
+        <Typography ml={4} variant="body2">
           {currencyFormatter(product?.price)}
         </Typography>
-        <ButtonBase>
+        <ButtonBase
+          onClick={() => {
+            RemoveItemFromCart();
+          }}
+        >
           <RemoveIcon style={{ background: "#aaa", borderRadius: 20 }} />
         </ButtonBase>
       </div>

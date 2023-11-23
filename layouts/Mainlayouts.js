@@ -77,14 +77,14 @@ function MainLayout({
         <meta property="og:title" content={title || "Home | credo"} />
         <meta property="og:image" content={image || "/img/logo.png"} />
         <meta name="theme-color" content="#000" />
-        <link rel="shortcut icon" href="/img/favicon.png" />
+        <link rel="shortcut icon" href="/img/logo.png" />
         <meta
           name="description"
-          content={description || "Find  specials, and coupons for free"}
+          content={description || "Find And PurChase Your Favourite Clothes"}
         />
         <meta
           property="og:description"
-          content={description || "Find  specials, and coupons for free"}
+          content={description || "Find And PurChase Your Favourite Clothes"}
         />
       </Head>
       <Toolbar route={route} />

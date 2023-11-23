@@ -13,8 +13,9 @@ const useStyles = makeStyles({
   },
 });
 function Dashboard() {
-  const { collectionsState, cartegoryState, customerState } =
+  const { collectionsState, cartegoryState, customerState, orderState } =
     useContext(GlobalContext);
+  console.log("orderState", orderState);
   const headerArray = [
     {
       label: "Customers",
@@ -34,7 +35,7 @@ function Dashboard() {
     {
       label: "Total orders",
       icon: "/img/dash4.png",
-      value: "5",
+      value: orderState?.data?.length,
     },
   ];
   const classes = useStyles();
@@ -51,7 +52,7 @@ function Dashboard() {
           ))}
         </Grid>
         <div style={{ marginTop: 50 }}>
-          <BasicTable />
+          <BasicTable rows={[...orderState.data]?.reverse()?.splice(0, 5)} />
         </div>
       </div>
     </MiniDrawer>

@@ -66,7 +66,7 @@ function Index() {
   const { uid } = router.query;
   const { cartDispatch } = useContext(GlobalContext);
   // console.log(uid, router.query);
-  const [selectedSize, setSelectedSize] = useState("S");
+  const [selectedSize, setSelectedSize] = useState("s");
   const [loading, setLoading] = useState(false);
   const [productDetails, setProductDetails] = useState({});
   const [cartLoading, setCartLoading] = useState(false);
@@ -93,6 +93,9 @@ function Index() {
       const res = (
         await client.post(`/api/v1/Cart/addToCart/${uid}`, {
           noOfItems: quantity,
+
+          size: selectedSize,
+          amount: productDetails?.price,
         })
       ).data;
       console.log("daa", res);
@@ -124,7 +127,7 @@ function Index() {
   };
   useEffect(() => {
     if (productDetails.categories)
-      FetchProductByCategory(productDetails?.categories[0]?.id);
+      FetchProductByCategory(productDetails?.categories[1]?.id);
   }, [productDetails]);
 
   const classes = useStyles();
@@ -149,7 +152,7 @@ function Index() {
             <Grid item xs={12} sm={12} md={6}>
               <div>
                 <Typography gutterBottom variant="h4">
-                  Credo Shirt air Cg{" "}
+                  {productDetails?.title}
                 </Typography>
                 <Typography variant="h6" fontWeight={800}>
                   {currencyFormatter(productDetails?.price)}
@@ -206,7 +209,23 @@ function Index() {
                   >
                     {cartLoading ? <CircularProgress /> : "ADD TO CART"}
                   </Button>
-                  <Button size="large" fullWidth variant="contained">
+                  <Button
+                    onClick={() => {
+                      router.push({
+                        pathname: "/checkout",
+                        query: {
+                          data: JSON.stringify({
+                            ...productDetails,
+                            size: selectedSize,
+                            noOfItems: quantity,
+                          }),
+                        },
+                      });
+                    }}
+                    size="large"
+                    fullWidth
+                    variant="contained"
+                  >
                     Buy Now
                   </Button>
                 </div>
@@ -222,26 +241,28 @@ function Index() {
             </Grid>
           </Grid>
         </div>
-        <div>
-          <Typography
-            mt={3}
-            mb={3}
-            align="center"
-            fontWeight={600}
-            variant="h6"
-          >
-            Check this out
-          </Typography>
-          <div className={classes.wrapper}>
-            <Grid container spacing={2}>
-              {[...products]?.splice(0, 8)?.map((cur) => (
-                <Grid item key={cur} sm={6} xs={6} md={3}>
-                  <ProductsItem {...cur} />
-                </Grid>
-              ))}
-            </Grid>
+        {products.length > 0 && (
+          <div>
+            <Typography
+              mt={3}
+              mb={3}
+              align="center"
+              fontWeight={600}
+              variant="h6"
+            >
+              Check this out
+            </Typography>
+            <div className={classes.wrapper}>
+              <Grid container spacing={2}>
+                {[...products]?.splice(0, 8)?.map((cur) => (
+                  <Grid item key={cur} sm={6} xs={6} md={2.5}>
+                    <ProductsItem {...cur} />
+                  </Grid>
+                ))}
+              </Grid>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </MainLayout>
   );

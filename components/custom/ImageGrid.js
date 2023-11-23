@@ -3,6 +3,7 @@
 import React from "react";
 import { makeStyles } from "@mui/styles";
 import { getRandomItems } from "../../utility";
+import { useRouter } from "next/router";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -46,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
 
 const ImageGrid = ({ images }) => {
   const classes = useStyles();
-
+  const router = useRouter();
   return (
     <div className={classes.container}>
       {getRandomItems(images)
@@ -63,6 +64,9 @@ const ImageGrid = ({ images }) => {
             }`}
           >
             <img
+              onClick={() => {
+                router.push("/collections/" + image.id);
+              }}
               src={image.image}
               alt={`Image ${index + 1}`}
               className={classes.image}

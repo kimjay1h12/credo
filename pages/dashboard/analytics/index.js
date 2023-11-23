@@ -30,6 +30,7 @@ function Index() {
     customerState,
     collectionsState,
     cartegoryState,
+    orderState,
   } = useContext(GlobalContext);
   const router = useRouter();
   const headerArray = [
@@ -56,17 +57,7 @@ function Index() {
     {
       label: "Total orders",
       icon: "/img/dash4.png",
-      value: "0",
-    },
-    {
-      label: "Total Payments",
-      icon: "/img/dash4.png",
-      value: "0",
-    },
-    {
-      label: "Total Sales",
-      icon: "/img/dash4.png",
-      value: "0",
+      value: orderState?.data?.length,
     },
   ];
   const classes = useStyles();

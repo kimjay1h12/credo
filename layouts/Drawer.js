@@ -38,6 +38,7 @@ import {
   getAllUserProducts,
 } from "../context/actions/productsActions";
 import { logoutHandler } from "../context/actions/auth";
+import { getAllOrders } from "../context/actions/orderAction";
 const drawerWidth = 240;
 const routes = [
   {
@@ -167,6 +168,7 @@ export default function MiniDrawer({ children, active }) {
     productDispatch,
     cartDispatch,
     authDispatch,
+    orderDispatch,
     cartState,
     collectionsDispatch,
     cartegoryDispatch,
@@ -177,7 +179,7 @@ export default function MiniDrawer({ children, active }) {
   React.useEffect(() => {
     setTimeout(() => {
       getAllUserProducts(productDispatch);
-
+      getAllOrders(orderDispatch);
       getAllCategory(cartegoryDispatch);
       getAllCollections(collectionsDispatch);
       getAllAdminProducts(adminProductsDispatch);

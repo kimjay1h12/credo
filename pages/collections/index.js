@@ -56,7 +56,7 @@ const useStyles = makeStyles({
   content: {
     padding: 15,
     ["@media (min-width : 1200px)"]: {
-      padding: 50,
+      padding: 70,
     },
   },
   button: {
@@ -123,7 +123,7 @@ function Index() {
             className={classes.header}
             style={{
               backgroundImage: `url(${
-                [...data]?.find((item) => item.id === (id === "" ? 1 : id))
+                [...data]?.find((item) => item.id === (id === "" ? 5 : id))
                   ?.image
               })`,
             }}
@@ -145,22 +145,6 @@ function Index() {
                 ))}
               </TextField>
               <div>
-                <ButtonBase
-                  style={{
-                    height: 40,
-                    width: 50,
-                    display: "flex",
-                    // flexDirection: "row",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    borderColor: "#000",
-                    borderWidth: 0.5,
-                    borderStyle: "solid",
-                  }}
-                >
-                  <Typography>USD</Typography>
-                  {/* <KeyboardArrowDownIcon /> */}
-                </ButtonBase>
                 <ButtonBase
                   style={{
                     height: 40,
@@ -204,15 +188,15 @@ function Index() {
             <div className={classes.wrapper}>
               <Grid container spacing={2}>
                 {products.map((cur) => (
-                  <Grid item key={cur} sm={6} xs={6} md={3}>
+                  <Grid item key={cur} sm={6} xs={6} md={2.5}>
                     <ProductsItem {...cur} />
                   </Grid>
                 ))}
               </Grid>
             </div>
-            <div className={classes.center}>
+            {/* <div className={classes.center}>
               <Button variant="outlined">View More</Button>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
