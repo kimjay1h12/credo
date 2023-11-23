@@ -17,6 +17,7 @@ import { useState } from "react";
 import client from "../../api/client";
 import { useContext } from "react";
 import { GlobalContext } from "../../context";
+import { useRouter } from "next/router";
 const useStyles = makeStyles({
   root: {},
   row: {
@@ -44,7 +45,7 @@ const useStyles = makeStyles({
       margin: 0,
       minHeight: "100vh",
 
-      backgroundImage: `url("/img/collectionbg.png")`,
+      // backgroundImage: `url("/img/collectionbg.png")`,
     },
   },
   center: {
@@ -77,6 +78,8 @@ const useStyles = makeStyles({
   },
 });
 function Index() {
+  const router = useRouter();
+  const { uid } = router.query;
   const {
     collectionsState: { data },
   } = useContext(GlobalContext);
@@ -91,13 +94,14 @@ function Index() {
   const [loading, setLoading] = useState(false);
   const [products, setProducts] = useState([]);
   const [id, setId] = useState("");
+  const [background, setBackground] = useState([]);
   // const classes = useStyles();
-  const FetchProductByCategory = async (id = data[0]?.id) => {
+  const FetchProductByCategory = async () => {
     setLoading(true);
-    if (id)
+    if (uid)
       try {
         const res = (
-          await client.get(`/api/v1/Product/getProductsByCollection/${id}`)
+          await client.get(`/api/v1/Product/getProductsByCollection/${uid}`)
         ).data;
         console.log("products", res);
         setProducts(res.data);
@@ -107,98 +111,95 @@ function Index() {
     setLoading(false);
   };
   useEffect(() => {
-    if (id === "") {
-      FetchProductByCategory();
-    } else {
-      FetchProductByCategory(id);
-    }
-  }, [id]);
-
+    FetchProductByCategory();
+  }, [uid]);
+  console.log(
+    "any",
+    uid,
+    data?.find((item) => item.id === uid)
+  );
   const classes = useStyles();
   return (
     <MainLayout route={"collections"}>
       <div className={classes.root}>
-        {data.length > 0 && (
-          <div
-            className={classes.header}
-            style={{
-              backgroundImage: `url(${
-                [...data]?.find((item) => item.id === (id === "" ? 1 : id))
-                  ?.image
-              })`,
-            }}
-          >
-            <div className={classes.row}>
-              <TextField
-                value={id === "" ? data[0]?.id : id}
-                size="small"
-                select
-                sx={{ minWidth: 200, background: "#f7f7f7" }}
-                onChange={(e) => {
-                  setId(e.target.value);
+        <div
+          className={classes.header}
+          style={{
+            backgroundImage: `url(${
+              data?.find((item) => item.id === 5)?.image
+            })`,
+          }}
+        >
+          <div className={classes.row}>
+            <TextField
+              value={uid}
+              size="small"
+              select
+              sx={{ minWidth: 200, background: "#f7f7f7" }}
+              // onChange={(e) => {
+              //   setId(e.target.value);
+              // }}
+            >
+              {data.map((option) => (
+                <MenuItem key={option.id} value={option.id}>
+                  {option.title}
+                </MenuItem>
+              ))}
+            </TextField>
+            <div>
+              <ButtonBase
+                style={{
+                  height: 40,
+                  width: 50,
+                  display: "flex",
+                  // flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderColor: "#000",
+                  borderWidth: 0.5,
+                  borderStyle: "solid",
                 }}
               >
-                {data.map((option) => (
-                  <MenuItem key={option.id} value={option.id}>
-                    {option.title}
-                  </MenuItem>
-                ))}
-              </TextField>
-              <div>
-                <ButtonBase
-                  style={{
-                    height: 40,
-                    width: 50,
-                    display: "flex",
-                    // flexDirection: "row",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    borderColor: "#000",
-                    borderWidth: 0.5,
-                    borderStyle: "solid",
-                  }}
-                >
-                  <Typography>USD</Typography>
-                  {/* <KeyboardArrowDownIcon /> */}
-                </ButtonBase>
-                <ButtonBase
-                  style={{
-                    height: 40,
-                    width: 50,
-                    display: "flex",
-                    // flexDirection: "row",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    borderColor: "#000",
-                    borderWidth: 0.5,
-                    borderStyle: "solid",
-                    background: "#000",
-                    color: "#fff",
-                  }}
-                >
-                  <Typography>NGN</Typography>
-                  {/* <KeyboardArrowDownIcon /> */}
-                </ButtonBase>
-              </div>
-              <Menu
-                id="basic-menu"
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleClose}
-                MenuListProps={{
-                  "aria-labelledby": "basic-button",
+                <Typography>USD</Typography>
+                {/* <KeyboardArrowDownIcon /> */}
+              </ButtonBase>
+              <ButtonBase
+                style={{
+                  height: 40,
+                  width: 50,
+                  display: "flex",
+                  // flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderColor: "#000",
+                  borderWidth: 0.5,
+                  borderStyle: "solid",
+                  background: "#000",
+                  color: "#fff",
                 }}
               >
-                <MenuItem onClick={handleClose}>2000</MenuItem>
-                <MenuItem onClick={handleClose}>4000</MenuItem>
-                <MenuItem onClick={handleClose}>6000</MenuItem>
-              </Menu>
+                <Typography>NGN</Typography>
+                {/* <KeyboardArrowDownIcon /> */}
+              </ButtonBase>
             </div>
-            {/* <Hidden smDown>
+            <Menu
+              id="basic-menu"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              MenuListProps={{
+                "aria-labelledby": "basic-button",
+              }}
+            >
+              <MenuItem onClick={handleClose}>2000</MenuItem>
+              <MenuItem onClick={handleClose}>4000</MenuItem>
+              <MenuItem onClick={handleClose}>6000</MenuItem>
+            </Menu>
+          </div>
+          {/* <Hidden smDown>
             <img src="/img/c1.png" className={classes.headerImage} />
           </Hidden> */}
-          </div>
-        )}
+        </div>
         <div>
           <div className={classes.content}>
             <div className={classes.wrapper}>

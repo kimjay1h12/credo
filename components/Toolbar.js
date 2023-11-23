@@ -4,6 +4,7 @@ import Menu from "@mui/icons-material/Menu";
 import {
   AppBar,
   Backdrop,
+  Badge,
   Button,
   ButtonBase,
   Grow,
@@ -17,8 +18,9 @@ import SearchIcon from "@mui/icons-material/Search";
 import PersonIcon from "@mui/icons-material/Person";
 import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import TopRightDialog from "./Cart/CartView";
+import { GlobalContext } from "../context";
 // import SignUp from "./Section/SignUp";
 
 const useStyles = makeStyles({
@@ -126,6 +128,7 @@ function AppToolbar({ route, children, background, opencart = false }) {
   const classes = useStyles();
   const [menuOpen, setMenuOpen] = useState(false);
   const login = "/login";
+  const { cartState } = useContext(GlobalContext);
   const routes = [
     {
       href: "/",
@@ -203,6 +206,7 @@ function AppToolbar({ route, children, background, opencart = false }) {
       position="sticky"
     >
       <TopRightDialog
+        data={cartState.data}
         open={openCartDialog}
         onClose={() => {
           setOpenCartDialog(false);
@@ -266,21 +270,28 @@ function AppToolbar({ route, children, background, opencart = false }) {
             >
               <SearchIcon />
               <PersonIcon />
-              <ShoppingBagIcon
-                onClick={() => {
-                  setOpenCartDialog(true);
-                }}
-              />
+              <Badge
+                badgeContent={cartState?.data?.length || 0}
+                color="primary"
+              >
+                <ShoppingBagIcon
+                  onClick={() => {
+                    setOpenCartDialog(true);
+                  }}
+                />
+              </Badge>
             </Box>
           </div>
         </Hidden>
         <Hidden smUp>
           <div>
-            <ShoppingBagIcon
-              onClick={() => {
-                setOpenCartDialog(true);
-              }}
-            />
+            <Badge badgeContent={cartState?.data?.length || 0} color="primary">
+              <ShoppingBagIcon
+                onClick={() => {
+                  setOpenCartDialog(true);
+                }}
+              />
+            </Badge>
           </div>
         </Hidden>
       </Toolbar>

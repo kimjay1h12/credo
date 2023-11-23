@@ -4,6 +4,13 @@ import MiniDrawer from "../../../layouts/Drawer";
 import { makeStyles } from "@mui/styles";
 import ProductTable from "../../../components/DashBoard/ProductTable";
 import { useRouter } from "next/router";
+import { useContext } from "react";
+import { GlobalContext } from "../../../context";
+import { useEffect } from "react";
+import {
+  deleteAdminProducts,
+  getAllUserProducts,
+} from "../../../context/actions/productsActions";
 const useStyles = makeStyles({
   root: {
     padding: 50,
@@ -18,6 +25,16 @@ const useStyles = makeStyles({
 function Index() {
   const router = useRouter();
   const classes = useStyles();
+  const {
+    // productState: { data },
+    productDispatch,
+    adminProductsDispatch,
+    adminProductsState: { data },
+  } = useContext(GlobalContext);
+  useEffect(() => {
+    getAllUserProducts(productDispatch);
+  }, []);
+
   return (
     <MiniDrawer active={"product"}>
       <div className={classes.root}>
@@ -36,7 +53,7 @@ function Index() {
             Add Products
           </Button>
         </div>
-        <ProductTable />
+        <ProductTable rows={data} />
       </div>
     </MiniDrawer>
   );

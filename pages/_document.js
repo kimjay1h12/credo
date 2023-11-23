@@ -7,7 +7,7 @@ export default class MyDocument extends Document {
     return (
       <Html lang="en">
         <Head>
-          <meta name="keywords" content=" Agbero" />
+          <meta name="keywords" content=" credo" />
           <meta name="author" content="kimjay" />
         </Head>
         <body>

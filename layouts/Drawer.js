@@ -1,35 +1,43 @@
-import * as React from "react";
-import { styled, useTheme } from "@mui/material/styles";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import MuiAppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
-import MuiAppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
-import DashboardIcon from "@mui/icons-material/Dashboard";
+import { styled, useTheme } from "@mui/material/styles";
+import * as React from "react";
 
-import List from "@mui/material/List";
-import CssBaseline from "@mui/material/CssBaseline";
-import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
-import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
-import MenuIcon from "@mui/icons-material/Menu";
+import AddBoxIcon from "@mui/icons-material/AddBox";
+import AnalyticsIcon from "@mui/icons-material/Analytics";
+import AppsIcon from "@mui/icons-material/Apps";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import MenuIcon from "@mui/icons-material/Menu";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
+import PersonIcon from "@mui/icons-material/Person";
+import SellIcon from "@mui/icons-material/Sell";
+import SettingsIcon from "@mui/icons-material/Settings";
+import { Avatar, ButtonBase, TextField } from "@mui/material";
+import Button from "@mui/material/Button";
+import CssBaseline from "@mui/material/CssBaseline";
+import Divider from "@mui/material/Divider";
+import IconButton from "@mui/material/IconButton";
+import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
-import SellIcon from "@mui/icons-material/Sell";
-import { Avatar, ButtonBase, TextField } from "@mui/material";
-import AppsIcon from "@mui/icons-material/Apps";
-import AddBoxIcon from "@mui/icons-material/AddBox";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import PersonIcon from "@mui/icons-material/Person";
-import AnalyticsIcon from "@mui/icons-material/Analytics";
-import SettingsIcon from "@mui/icons-material/Settings";
+import Typography from "@mui/material/Typography";
 import { useRouter } from "next/router";
+import { GlobalContext } from "../context";
+import { getAllCategory } from "../context/actions/categoryAction";
+import { getAllCollections } from "../context/actions/collectionAction";
+import { getAllCustomers } from "../context/actions/cutomersctions";
+import {
+  getAllAdminProducts,
+  getAllUserProducts,
+} from "../context/actions/productsActions";
+import { logoutHandler } from "../context/actions/auth";
 const drawerWidth = 240;
 const routes = [
   {
@@ -154,6 +162,29 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 export default function MiniDrawer({ children, active }) {
+  const {
+    authState: { loggedIn, data, setup_data },
+    productDispatch,
+    cartDispatch,
+    authDispatch,
+    cartState,
+    collectionsDispatch,
+    cartegoryDispatch,
+    adminProductsDispatch,
+    customerDispatch,
+  } = React.useContext(GlobalContext);
+  // const { cartState } = useContext(GlobalContext);
+  React.useEffect(() => {
+    setTimeout(() => {
+      getAllUserProducts(productDispatch);
+
+      getAllCategory(cartegoryDispatch);
+      getAllCollections(collectionsDispatch);
+      getAllAdminProducts(adminProductsDispatch);
+      getAllCustomers(customerDispatch);
+    }, 500);
+    // client.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
+  }, [data.token]);
   const theme = useTheme();
   const [open, setOpen] = React.useState(true);
   const router = useRouter();
@@ -211,9 +242,9 @@ export default function MiniDrawer({ children, active }) {
             <Avatar />
             <div style={{ display: "flex", flexDirection: "column" }}>
               <Typography variant="caption" fontWeight={700}>
-                John Doe
+                {data?.user?.fullName}
               </Typography>
-              <Typography variant="caption">Olawaleadeit@gmail.com</Typography>
+              <Typography variant="caption"> {data?.user?.email}</Typography>
             </div>
           </div>
         </Toolbar>
@@ -278,10 +309,41 @@ export default function MiniDrawer({ children, active }) {
             </ListItem>
           ))}
         </List>
+
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-end",
+            height: "100%",
+            padding: 15,
+          }}
+        >
+          <Button
+            variant="contained"
+            sx={{ background: "red" }}
+            onClick={() => {
+              const r = logoutHandler(authDispatch);
+              if (r) {
+                router.push("/");
+              }
+            }}
+          >
+            {" "}
+            Log Out
+          </Button>
+        </div>
       </Drawer>
       <Box
         component="main"
-        sx={{ flexGrow: 1, background: "#EFF6FF", minHeight: "100vh" }}
+        sx={{
+          flexGrow: 1,
+
+          // height: "100%",
+          background: "#EFF6FF",
+          minHeight: "100vh",
+          // flex: 1,
+        }}
       >
         <DrawerHeader />
         {children}

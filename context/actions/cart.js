@@ -5,11 +5,12 @@ export const getCart = async (dispatch) => {
     type: "LOADING",
   });
   try {
-    const p = (await client.get(`/cart`)).data;
+    const p = (await client.get(`/api/v1/Cart/getCartItems`)).data;
     dispatch({
       type: "FETCHED_DATA",
       payload: p.data,
     });
+
     console.log(p.data);
   } catch (error) {
     dispatch({

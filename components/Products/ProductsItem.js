@@ -1,33 +1,74 @@
-import { Typography } from "@mui/material";
+import { Typography, Divider } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { useRouter } from "next/router";
 import React from "react";
+import { currencyFormatter } from "../../utility";
 const useStyles = makeStyles({
   root: {
     width: "100%",
-    padding: 20,
-    background: "#f7f7f7",
+    // height: 300,
+    height: "100%",
+    padding: 4,
+
     borderRadius: 10,
     cursor: "pointer",
+    "&:hover": {
+      background: "#f7f7f7",
+      boxShadow: "5px 5px 10px rgba(0, 0, 0, 0.1)",
+    },
+    "&::active": {
+      background: "#f7f7f7",
+    },
+  },
+
+  img: {
+    height: 160,
+    width: "100%",
+    objectFit: "cover",
+    borderRadius: 10,
+    ["@media (min-width : 1200px)"]: {
+      height: 200,
+    },
   },
 });
 
-function ProductsItem({ url }) {
+function ProductsItem({ pictures = [], title, price, id }) {
+  // console.log("id", id);
   const router = useRouter();
   const classes = useStyles();
   return (
     <div
       onClick={() => {
-        router.push("/product/" + 12345);
+        router.push("/product/" + id);
       }}
       className={classes.root}
     >
-      <img
-        src={url ? "/img/test.png" : "/img/img2.png"}
-        style={{ height: "100%", width: "100%" }}
-      />
-      <Typography fontWeight={400}>Credo Shirt air Cg </Typography>
-      <Typography fontWeight={800}>$120.00</Typography>
+      <img src={pictures[0]?.url} className={classes.img} />
+      {/* <Divider /> */}
+      <Typography variant="caption" fontWeight={400}>
+        {title}
+        {/* {" ..."} */}
+      </Typography>
+      <Typography
+        // color={"gray"}
+        // style={{ textDecorationLine: "line-through" }}
+        variant="body2"
+        // ml={1}
+        gutterBottom
+        fontWeight={600}
+      >
+        {currencyFormatter(price)}
+      </Typography>
+      <Typography
+        color={"gray"}
+        style={{ textDecorationLine: "line-through" }}
+        variant="body2"
+        // ml={1}
+        gutterBottom
+        fontWeight={600}
+      >
+        {currencyFormatter(price + 100)}
+      </Typography>
     </div>
   );
 }

@@ -2,7 +2,8 @@ import { ButtonBase, Typography } from "@mui/material";
 import React from "react";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import RemoveIcon from "@mui/icons-material/Remove";
-function CartItem() {
+import { currencyFormatter } from "../../utility";
+function CartItem({ id, noOfItems, product }) {
   return (
     <div
       style={{
@@ -14,10 +15,15 @@ function CartItem() {
       }}
     >
       <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
-        <img src="/img/test.png" style={{ width: 80, height: 80 }} />
+        <img
+          src={product?.pictures[0]?.url}
+          style={{ width: 80, height: 80 }}
+        />
         <div style={{ display: "flex", alignItems: "flex-start", gap: 5 }}>
-          <Typography>Credo Shirt air Cg </Typography>
-          <Typography fontWeight={800}>x 2</Typography>
+          <Typography variant="body2">{product.title}</Typography>
+          <Typography fontWeight={800} variant="body2">
+            x {noOfItems}
+          </Typography>
         </div>
       </div>
       <div
@@ -25,9 +31,12 @@ function CartItem() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
+          alignItems: "flex-end",
         }}
       >
-        <Typography fontWeight={800}>$200</Typography>
+        <Typography variant="body2" fontWeight={800}>
+          {currencyFormatter(product?.price)}
+        </Typography>
         <ButtonBase>
           <RemoveIcon style={{ background: "#aaa", borderRadius: 20 }} />
         </ButtonBase>

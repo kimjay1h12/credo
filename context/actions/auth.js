@@ -5,11 +5,22 @@ export const signupHandler = async (data, dispatch) => {
     type: "LOADING",
   });
   try {
-    const res = await client.post("business/signup", data);
+    const res = await client.post("/api/v1/Auth/register", data);
+    // console.log("signup", res.data.data?.user);
+    localStorage.setItem("nd-rest-tkn", res.data.data?.authToken);
+    localStorage.setItem("userData", JSON.stringify(res.data.data?.user));
+    // localStorage.removeItem("setupStore");
+    client.defaults.headers.post["Content-Type"] = "application/json";
+    client.defaults.headers.Authorization = `Bearer ${res.data.data?.authToken}`;
+    dispatch({
+      type: "SUCCESS",
+      payload: res.data.data,
+    });
 
     return true;
   } catch (error) {
-    console.log("Error", error.response);
+    console.log("Error", error.response.data);
+    alert(error?.response?.data?.message);
     dispatch({
       type: "ERROR",
       payload: error?.response?.data?.message,
@@ -31,6 +42,49 @@ export const resendOtp = async (data, dispatch) => {
     return true;
   } catch (error) {
     console.log("Error", error.response);
+    alert(error?.response?.data?.message);
+
+    dispatch({
+      type: "ERROR",
+      payload: error?.response?.data?.message,
+    });
+
+    return false;
+  }
+};
+export const forgottenpassword = async (data, dispatch) => {
+  // return alert(data.otp, data.email);
+  // console.log("data", data);
+  dispatch({
+    type: "LOADING",
+  });
+  try {
+    const res = await client.post("/api/v1/Auth/forgotPassword/", data);
+    console.log("forgotten password", res);
+    return true;
+  } catch (error) {
+    console.log("Error", error.response);
+    alert(error?.response?.data?.message);
+    dispatch({
+      type: "ERROR",
+      payload: error?.response?.data?.message,
+    });
+
+    return false;
+  }
+};
+export const resendPassword = async (data, dispatch) => {
+  // return alert(data.otp, data.email);
+  // console.log("data", data);
+  dispatch({
+    type: "LOADING",
+  });
+  try {
+    const res = await client.post("/api/v1/Auth/resetPassword", data);
+
+    return true;
+  } catch (error) {
+    console.log("Error", error.response);
     dispatch({
       type: "ERROR",
       payload: error?.response?.data?.message,
@@ -46,15 +100,18 @@ export const verifyOTP = async (data, dispatch) => {
     type: "LOADING",
   });
   try {
-    const res = await client.post("business/businessOtpVerification", data);
-    localStorage.setItem("nd-rest-tkn", res.data.data?.token);
-    client.defaults.headers.post["Content-Type"] = "application/json";
-    client.defaults.headers.Authorization = `Bearer ${res.data.data?.token}`;
-    console.log("success", res.data);
-    dispatch({
-      type: "SUCCESS",
-      payload: res.data.data,
-    });
+    const res = await client.post(
+      "/api/v1/Auth/verifyOtpCodePasswordReset",
+      data
+    );
+    // localStorage.setItem("nd-rest-tkn", res.data.data?.authToken);
+    // client.defaults.headers.post["Content-Type"] = "application/json";
+    // client.defaults.headers.Authorization = `Bearer ${res.data.data?.authToken}`;
+    // console.log("success", res.data);
+    // dispatch({
+    //   type: "SUCCESS",
+    //   payload: res.data.data,
+    // });
     return true;
   } catch (error) {
     console.log("Error", error.response);
@@ -72,13 +129,13 @@ export const signInHandler = async (data, dispatch) => {
     type: "LOADING",
   });
   try {
-    const res = await client.post("business/emailLogin", data);
+    const res = await client.post("/api/v1/Auth/login", data);
 
-    localStorage.setItem("nd-rest-tkn", res.data.data?.token);
-    localStorage.setItem("userData", JSON.stringify(res.data.data));
-    localStorage.removeItem("setupStore");
+    localStorage.setItem("nd-rest-tkn", res.data.data?.authToken);
+    localStorage.setItem("userData", JSON.stringify(res.data.data?.user));
+    // localStorage.removeItem("setupStore");
     client.defaults.headers.post["Content-Type"] = "application/json";
-    client.defaults.headers.Authorization = `Bearer ${res.data.data?.token}`;
+    client.defaults.headers.Authorization = `Bearer ${res.data.data?.authToken}`;
     dispatch({
       type: "SUCCESS",
       payload: res.data.data,
@@ -86,16 +143,15 @@ export const signInHandler = async (data, dispatch) => {
     getCurrentUser(dispatch);
     return true;
   } catch (error) {
+    alert(error?.response?.data?.message);
+
     console.log("Error", error.response);
-    if (error.response?.data?.message === "Email not verified") {
-      return "unverified";
-    } else {
-      dispatch({
-        type: "ERROR",
-        payload: error?.response?.data?.message,
-      });
-      return false;
-    }
+
+    dispatch({
+      type: "ERROR",
+      payload: error?.response?.data?.message,
+    });
+    return false;
   }
 };
 
@@ -106,7 +162,7 @@ export const setupPin = async (data, dispatch) => {
   try {
     const res = await client.post("business/setupPin", data);
 
-    // localStorage.setItem("nd-rest-tkn", res.data.data?.token);
+    // localStorage.setItem("nd-rest-tkn", res.data.data?.authToken);
     // localStorage.setItem("userData", JSON.stringify(res.data.data));
     // dispatch({
     //   type: "SUCCESS",
@@ -129,21 +185,16 @@ export const logoutHandler = (dispatch) => {
     type: "LOGOUT",
   });
   localStorage.clear();
-};
-
-export const getRestauantDetails = async (id, dispatch) => {
-  return client.get(`business/businessDetails?business_id=${id}`);
+  return true;
 };
 
 export const getCurrentUser = async (dispatch) => {
   const user = localStorage.getItem("userData");
-  const stored_setup_data = localStorage.getItem("setup_data");
-  if (stored_setup_data)
-    dispatch({
-      type: "SETUP_DATA",
-      payload: JSON.parse(stored_setup_data),
-    });
-
+  const authToken = localStorage.getItem("nd-rest-tkn");
+  // const stored_setup_data = localStorage.getItem("setup_data");
+  client.defaults.headers.post["Content-Type"] = "application/json";
+  client.defaults.headers.Authorization = `Bearer ${authToken}`;
+  console.log("user", user);
   if (user) {
     dispatch({
       type: "SUCCESS",
@@ -151,17 +202,22 @@ export const getCurrentUser = async (dispatch) => {
     });
     console.log("setupid", JSON.parse(user).id);
     try {
-      const setup_data = (
-        await client.get(
-          `/business/businessDetails?business_id=${JSON.parse(user).id}`
-        )
-      ).data?.data;
-      console.log("setupdata", setup_data);
+      const res = await client.get(`/api/v1/Auth/getUser`);
+      console.log("setupdata", res);
+      // localStorage.setItem("nd-rest-tkn", res.data.data?.authToken);
+      localStorage.setItem("userData", JSON.stringify(res.data.data));
+      // // localStorage.removeItem("setupStore");
+      // client.defaults.headers.post["Content-Type"] = "application/json";
+      // client.defaults.headers.Authorization = `Bearer ${res.data.data?.authToken}`;
+      const payload = {
+        user: res.data.data,
+        authToken: authToken,
+      };
+      console.log("userdata", payload);
       dispatch({
-        type: "SETUP_DATA",
-        payload: setup_data,
+        type: "SUCCESS",
+        payload: payload,
       });
-      localStorage.setItem("setup_data", JSON.stringify(setup_data));
     } catch (error) {
       logoutHandler(dispatch);
       console.log("Couldn't get user", error);

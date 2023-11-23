@@ -5,6 +5,17 @@ import Toolbar from "../components/Toolbar";
 
 import { useRouter } from "next/router";
 import Footer from "../components/Footer";
+import { useContext, useEffect } from "react";
+import { GlobalContext } from "../context";
+import {
+  getAllAdminProducts,
+  getAllUserProducts,
+} from "../context/actions/productsActions";
+import { CircularProgress } from "@mui/material";
+import { getCart } from "../context/actions/cart";
+import { getAllCategory } from "../context/actions/categoryAction";
+import { getAllCollections } from "../context/actions/collectionAction";
+import { getCurrentUser } from "../context/actions/auth";
 
 const useStyles = makeStyles({
   loading: {
@@ -37,11 +48,32 @@ function MainLayout({
   const router = useRouter();
 
   const classes = useStyles();
-
+  const {
+    authState: { loggedIn, data, setup_data },
+    productDispatch,
+    cartDispatch,
+    cartState,
+    collectionsDispatch,
+    cartegoryDispatch,
+    adminProductsDispatch,
+    authDispatch,
+  } = useContext(GlobalContext);
+  // const { cartState } = useContext(GlobalContext);
+  useEffect(() => {
+    setTimeout(() => {
+      getAllUserProducts(productDispatch);
+      getCart(cartDispatch);
+      getAllCategory(cartegoryDispatch);
+      getAllCollections(collectionsDispatch);
+      getAllAdminProducts(adminProductsDispatch);
+      getCurrentUser(authDispatch);
+    }, 500);
+    // client.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
+  }, []);
   return (
     <>
       <Head>
-        <title>{title || "agbero"}</title>
+        <title>{title || "credo"}</title>
         <meta property="og:title" content={title || "Home | credo"} />
         <meta property="og:image" content={image || "/img/logo.png"} />
         <meta name="theme-color" content="#000" />
@@ -57,6 +89,11 @@ function MainLayout({
       </Head>
       <Toolbar route={route} />
       <main className={classes.main}>{children}</main>
+      {loading && (
+        <div className={classes.loading}>
+          <CircularProgress />
+        </div>
+      )}
       <Footer />
     </>
   );

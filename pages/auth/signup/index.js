@@ -4,10 +4,16 @@ import {
   Divider,
   TextField,
   Typography,
+  CircularProgress,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { useRouter } from "next/router";
 import React from "react";
+import { useState } from "react";
+import client from "../../../api/client";
+import { signupHandler } from "../../../context/actions/auth";
+import { useContext } from "react";
+import { GlobalContext } from "../../../context";
 
 const useStyles = makeStyles({
   root: {
@@ -45,7 +51,24 @@ const useStyles = makeStyles({
   },
 });
 function Index() {
+  const { authDispatch, authState } = useContext(GlobalContext);
+  // console.log("authsatat", authState);
+  const [formData, setFormData] = useState({
+    fullName: "",
+    email: "",
+    password: "",
+  });
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const HandleSignUp = async () => {
+    setLoading(true);
+    const res = await signupHandler(formData, authDispatch);
+    if (res) {
+      router.push("/");
+    }
+    setLoading(false);
+  };
+
   const classes = useStyles();
   return (
     <div className={classes.root}>
@@ -58,12 +81,58 @@ function Index() {
           Sign Up
         </Typography>
         <div style={{ maxWidth: 420, width: "100%", padding: 10 }}>
-          <TextField label="UserName" fullWidth sx={{ marginBottom: 1 }} />
-          <TextField label="Email" fullWidth sx={{ marginBottom: 1 }} />
-          <TextField label="Password" fullWidth sx={{ marginBottom: 3 }} />
+          <TextField
+            value={formData.fullName}
+            onChange={(e) => {
+              setFormData({
+                ...formData,
+                fullName: e.target.value,
+              });
+            }}
+            label="UserName"
+            fullWidth
+            sx={{ marginBottom: 1 }}
+          />
+          <TextField
+            value={formData.email}
+            onChange={(e) => {
+              setFormData({
+                ...formData,
+                email: e.target.value,
+              });
+            }}
+            type="email"
+            label="Email"
+            fullWidth
+            sx={{ marginBottom: 1 }}
+          />
+          <TextField
+            value={formData.password}
+            onChange={(e) => {
+              setFormData({
+                ...formData,
+                password: e.target.value,
+              });
+            }}
+            label="Password"
+            fullWidth
+            type="password"
+            sx={{ marginBottom: 3 }}
+          />
 
-          <Button size="large" variant="contained" fullWidth>
-            Login
+          <Button
+            onClick={() => {
+              HandleSignUp();
+            }}
+            size="large"
+            variant="contained"
+            fullWidth
+          >
+            {loading ? (
+              <CircularProgress style={{ color: "#fff" }} />
+            ) : (
+              "Sign up"
+            )}
           </Button>
           <div
             style={{

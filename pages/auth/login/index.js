@@ -1,13 +1,16 @@
 import {
   Button,
   ButtonBase,
+  CircularProgress,
   Divider,
   TextField,
   Typography,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useContext, useState } from "react";
+import { GlobalContext } from "../../../context";
+import { signInHandler } from "../../../context/actions/auth";
 
 const useStyles = makeStyles({
   root: {
@@ -45,8 +48,23 @@ const useStyles = makeStyles({
   },
 });
 function Index() {
-  const router = useRouter();
+  // const router = useRouter();
   const classes = useStyles();
+  const { authDispatch, authState } = useContext(GlobalContext);
+  // console.log("authsatat", authState);
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  const HandleSignIn = async () => {
+    setLoading(true);
+    const res = await signInHandler(formData, authDispatch);
+
+    setLoading(false);
+  };
+
   return (
     <div className={classes.root}>
       <div className={classes.header}>
@@ -56,8 +74,31 @@ function Index() {
       <div className={classes.content}>
         <div style={{ maxWidth: 420, width: "100%", padding: 10 }}>
           {/* <Typography>ghjkl;</Typography> */}
-          <TextField label="Email" fullWidth sx={{ marginBottom: 1 }} />
-          <TextField label="Password" fullWidth />
+          <TextField
+            value={formData.email}
+            onChange={(e) => {
+              setFormData({
+                ...formData,
+                email: e.target.value,
+              });
+            }}
+            type="email"
+            label="Email"
+            fullWidth
+            sx={{ marginBottom: 1 }}
+          />
+          <TextField
+            label="Password"
+            fullWidth
+            type="password"
+            value={formData.password}
+            onChange={(e) => {
+              setFormData({
+                ...formData,
+                password: e.target.value,
+              });
+            }}
+          />
           <div className={classes.forgottenpassword}>
             <Button
               variant="text"
@@ -68,8 +109,19 @@ function Index() {
               Forgotten Password
             </Button>
           </div>
-          <Button size="large" variant="contained" fullWidth>
-            Login
+          <Button
+            onClick={() => {
+              HandleSignIn();
+            }}
+            size="large"
+            variant="contained"
+            fullWidth
+          >
+            {loading ? (
+              <CircularProgress size={20} style={{ color: "#fff" }} />
+            ) : (
+              "Login"
+            )}
           </Button>
           <div
             style={{

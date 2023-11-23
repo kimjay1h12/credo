@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import CheckoutLayout from "../../../layouts/CheckoutLayout";
 import {
   Button,
@@ -9,6 +9,8 @@ import {
   Typography,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
+import { usePaystackPayment } from "react-paystack";
+
 import CheckoutItem from "../../../components/Checkout/CheckoutItem";
 import { useRouter } from "next/router";
 const useStyles = makeStyles({
@@ -23,6 +25,20 @@ const useStyles = makeStyles({
 function Index() {
   const router = useRouter();
   const classes = useStyles();
+  const [paystackConfig, setPaystackConfig] = useState({
+    // reference: new Date().getTime().toString(),
+    reference: null,
+    email: "olawaleadeit@gmail.com",
+    amount: 100,
+    publicKey: "pk_test_ceaca8935383d360f0869a7a0c4a3cc992d74f73",
+  });
+  const initializePayment = usePaystackPayment(paystackConfig);
+  const onSuccess = (reference) => {};
+  const onClose = () => {};
+
+  useEffect(() => {
+    if (paystackConfig.reference) initializePayment(onSuccess, onClose);
+  }, [paystackConfig]);
   return (
     <CheckoutLayout>
       <div>
@@ -109,7 +125,10 @@ function Index() {
             style={{ width: 300, marginBottom: 20 }}
             variant="contained"
             onClick={() => {
-              router.push("/payment/success");
+              setPaystackConfig({
+                ...paystackConfig,
+                reference: "sdfghjkl",
+              });
             }}
           >
             Pay Now

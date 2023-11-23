@@ -24,6 +24,8 @@ import { useContext } from "react";
 import { uploadHelmper } from "../../../../utility";
 import { createAdminProducts } from "../../../../context/actions/productsActions";
 import { useRouter } from "next/router";
+import client from "../../../../api/client";
+import { useEffect } from "react";
 const useStyles = makeStyles({
   root: {
     height: "100%",
@@ -80,6 +82,53 @@ const sizes = [
 ];
 function Index() {
   const classes = useStyles();
+  const router = useRouter();
+
+  const { uid } = router.query;
+  const [productDetails, setproductDetails] = useState("");
+  // console.log(uid);
+  const getProductDetails = async () => {
+    try {
+      const res = (await client.get(`/api/v1/Product/getProductDetails/${uid}`))
+        .data;
+      console.log("product details", res);
+      setproductDetails(res.data);
+    } catch (error) {
+      console.log("error fetching product details", error.response);
+    }
+  };
+  useEffect(() => {
+    getProductDetails();
+  }, [uid]);
+
+  useEffect(() => {
+    if (productDetails != "") {
+      setFormData({
+        title: productDetails?.title,
+        imageUrls: [
+          productDetails?.pictures?.map((cur) => {
+            return cur.url;
+          }),
+        ],
+        description: productDetails?.description,
+        price: productDetails?.price,
+        sku: productDetails?.sku,
+        sizeVariant: [...productDetails?.sizeVariant],
+        categoryId: [
+          ...productDetails?.categories?.map((cur) => {
+            return cur.id;
+          }),
+        ],
+        collectionId: [
+          ...productDetails?.collections?.map((cur) => {
+            return cur.id;
+          }),
+        ],
+        quantityAvailable: productDetails?.quantityAvailable,
+      });
+    }
+  }, [productDetails]);
+
   const { cartegoryState, collectionsState, productDispatch } =
     useContext(GlobalContext);
   const [formData, setFormData] = useState({
@@ -109,7 +158,6 @@ function Index() {
   };
   console.log(formData);
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
   const HandleUploadProducts = async () => {
     setLoading(true);
     const res = await createAdminProducts(productDispatch, formData);
@@ -122,7 +170,7 @@ function Index() {
     <MiniDrawer active={"product"}>
       <div className={classes.root}>
         <Typography fontWeight={600} mb={2} variant="h5">
-          Add products
+          Edit products
         </Typography>
         <Grid container spacing={6} style={{ maxHeight: "calc(100vh - 64px)" }}>
           <Grid item xs={20} md={7}>
@@ -186,8 +234,8 @@ function Index() {
                         >
                           <ButtonBase
                             onClick={() => {
-                              let s = [...formData.imageUrls];
-                              const b = formData.imageUrls.indexOf(cur);
+                              let s = [...formData?.imageUrls];
+                              const b = formData?.imageUrls?.indexOf(cur);
                               if (b > -1) s.splice(b, 1);
                               setFormData({
                                 ...formData,
@@ -308,9 +356,9 @@ function Index() {
                       onClick={() => {
                         // alert("fghj");
                         let s = [...formData.sizeVariant];
-                        const i = formData.sizeVariant.indexOf(cur.value);
+                        const i = formData?.sizeVariant?.indexOf(cur.id);
                         if (i > -1) s.splice(i, 1);
-                        else s.push(cur.value);
+                        else s.push(cur.id);
 
                         setFormData({
                           ...formData,
@@ -320,8 +368,8 @@ function Index() {
                       key={b}
                       control={
                         <Checkbox
-                          checked={formData.sizeVariant?.find(
-                            (item) => item === cur.value
+                          checked={formData?.sizeVariant?.find(
+                            (item) => item === cur.id
                           )}
                           size="small"
                         />
@@ -339,12 +387,12 @@ function Index() {
               <Typography>Select Category</Typography>
               <div className={classes.container}>
                 <FormGroup>
-                  {[...cartegoryState?.data].splice(0, 6)?.map((cur, b) => (
+                  {[...cartegoryState?.data]?.splice(0, 6)?.map((cur, b) => (
                     <FormControlLabel
                       onClick={() => {
                         // alert("fghj");
                         let s = [...formData.categoryId];
-                        const i = formData.categoryId.indexOf(cur.id);
+                        const i = formData?.categoryId?.indexOf(cur.id);
                         if (i > -1) s.splice(i, 1);
                         else s.push(cur.id);
 
@@ -356,7 +404,7 @@ function Index() {
                       key={b}
                       control={
                         <Checkbox
-                          checked={formData.categoryId?.find(
+                          checked={formData?.categoryId?.find(
                             (item) => item === cur.id
                           )}
                           size="small"
@@ -375,12 +423,12 @@ function Index() {
               <Typography>Select Collections</Typography>
               <div className={classes.container}>
                 <FormGroup>
-                  {[...collectionsState?.data].splice(0, 6)?.map((cur, b) => (
+                  {[...collectionsState?.data]?.splice(0, 6)?.map((cur, b) => (
                     <FormControlLabel
                       onClick={() => {
                         // alert("fghj");
                         let s = [...formData.collectionId];
-                        const i = formData.collectionId.indexOf(cur.id);
+                        const i = formData?.collectionId?.indexOf(cur.id);
                         if (i > -1) s.splice(i, 1);
                         else s.push(cur.id);
 
@@ -392,7 +440,7 @@ function Index() {
                       key={b}
                       control={
                         <Checkbox
-                          checked={formData.collectionId?.find(
+                          checked={formData?.collectionId?.find(
                             (item) => item === cur.id
                           )}
                           size="small"
@@ -404,32 +452,34 @@ function Index() {
                 </FormGroup>
               </div>
             </div>
-            <Button
-              variant="contained"
-              onClick={() => {
-                HandleUploadProducts();
-              }}
-              sx={{
-                // backgroundColor: "#1872F6",
-                color: "#fff",
-                marginTop: 2,
-                width: "100%",
-              }}
-            >
-              {" "}
-              {imageUploading ? (
-                <CircularProgress size={20} sx={{ color: "#fff" }} />
-              ) : (
-                "Create Product"
-              )}
-            </Button>
           </Grid>
         </Grid>
         <div
           style={{
-            marginBottom: 100,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
           }}
-        ></div>
+        >
+          <Button
+            onClick={() => {
+              HandleUploadProducts();
+            }}
+            sx={{
+              // backgroundColor: "#1872F6",
+              color: "#fff",
+              marginTop: 2,
+              width: 200,
+            }}
+          >
+            {" "}
+            {imageUploading ? (
+              <CircularProgress size={20} sx={{ color: "#fff" }} />
+            ) : (
+              "Create Product"
+            )}
+          </Button>
+        </div>
       </div>
     </MiniDrawer>
   );

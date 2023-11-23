@@ -8,9 +8,16 @@ import {
   Menu,
   MenuItem,
   Typography,
+  TextField,
 } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import ProductsItem from "../../components/Products/ProductsItem";
+import { useContext } from "react";
+import { GlobalContext } from "../../context";
+import client from "../../api/client";
+import { useEffect } from "react";
+import { useState } from "react";
+// import { TextFields } from "@mui/icons-material";
 const useStyles = makeStyles({
   root: {
     padding: 15,
@@ -49,6 +56,9 @@ const useStyles = makeStyles({
   },
 });
 function Index() {
+  const {
+    cartegoryState: { data },
+  } = useContext(GlobalContext);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -57,25 +67,54 @@ function Index() {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
+  const [loading, setLoading] = useState(false);
+  const [products, setProducts] = useState([]);
+  const [id, setId] = useState("");
   const classes = useStyles();
+  const FetchProductByCategory = async (id = data[0]?.id) => {
+    setLoading(true);
+    if (id)
+      try {
+        const res = (
+          await client.get(`/api/v1/Product/getProductsByCategory/${id}`)
+        ).data;
+        console.log("products", res);
+        setProducts(res.data);
+      } catch (error) {
+        console.log("error fetchin product by id", error.response);
+      }
+    setLoading(false);
+  };
+  useEffect(() => {
+    if (id === "") {
+      FetchProductByCategory();
+    } else {
+      FetchProductByCategory(id);
+    }
+  }, [id]);
+
   return (
-    <MainLayout route={"category"}>
+    <MainLayout route={"category"} loading={loading}>
       <div className={classes.root}>
         <Typography variant="h5" fontWeight={700}>
           Category
         </Typography>
         <div className={classes.row}>
-          <ButtonBase
-            id="basic-button"
-            aria-controls={open ? "basic-menu" : undefined}
-            aria-haspopup="true"
-            aria-expanded={open ? "true" : undefined}
-            onClick={handleClick}
+          <TextField
+            value={id === "" ? data[0]?.id : id}
+            size="small"
+            select
+            sx={{ minWidth: 200 }}
+            onChange={(e) => {
+              setId(e.target.value);
+            }}
           >
-            <Typography>Price, high to low</Typography>
-            <KeyboardArrowDownIcon />
-          </ButtonBase>
+            {data.map((option) => (
+              <MenuItem key={option.id} value={option.id}>
+                {option.name}
+              </MenuItem>
+            ))}
+          </TextField>
           <div>
             <ButtonBase
               style={{
@@ -129,9 +168,9 @@ function Index() {
         <div>
           <div className={classes.wrapper}>
             <Grid container spacing={2}>
-              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13].map((cur) => (
+              {products.map((cur) => (
                 <Grid item key={cur} sm={6} xs={6} md={3}>
-                  <ProductsItem url />
+                  <ProductsItem {...cur} />
                 </Grid>
               ))}
             </Grid>

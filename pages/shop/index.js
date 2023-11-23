@@ -1,5 +1,5 @@
 import { makeStyles } from "@mui/styles";
-import React from "react";
+import React, { useContext, useState } from "react";
 import MainLayout from "../../layouts/Mainlayouts";
 import {
   Button,
@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import ProductsItem from "../../components/Products/ProductsItem";
+import { GlobalContext } from "../../context";
 const useStyles = makeStyles({
   root: {
     padding: 15,
@@ -49,6 +50,10 @@ const useStyles = makeStyles({
   },
 });
 function Index() {
+  const {
+    productState: { data },
+  } = useContext(GlobalContext);
+  const [page, setPage] = useState(15);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -128,10 +133,10 @@ function Index() {
         </div>
         <div>
           <div className={classes.wrapper}>
-            <Grid container spacing={2}>
-              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13].map((cur) => (
+            <Grid container spacing={{ xs: 2, md: 6 }}>
+              {data.map((cur) => (
                 <Grid item key={cur} sm={6} xs={6} md={3}>
-                  <ProductsItem url />
+                  <ProductsItem {...cur} />
                 </Grid>
               ))}
             </Grid>

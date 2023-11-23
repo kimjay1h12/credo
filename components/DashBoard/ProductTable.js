@@ -9,40 +9,21 @@ import Paper from "@mui/material/Paper";
 import { Button, Typography, ButtonBase } from "@mui/material";
 import { useRouter } from "next/router";
 import RemoveIcon from "@mui/icons-material/Remove";
+import EditIcon from "@mui/icons-material/Edit";
+import { useContext } from "react";
+import { GlobalContext } from "../../context";
+import { deleteAdminProducts } from "../../context/actions/productsActions";
 
 function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
 }
 
-const rows = [
-  {
-    img: "/img/test.png",
-    quantity: "1 in stock",
-  },
-  {
-    img: "/img/test.png",
-    quantity: "1 in stock",
-  },
-  {
-    img: "/img/test.png",
-    quantity: "1 in stock",
-  },
-  {
-    img: "/img/test.png",
-    quantity: "1 in stock",
-  },
-  {
-    img: "/img/test.png",
-    quantity: "1 in stock",
-  },
-  {
-    img: "/img/test.png",
-    quantity: "1 in stock",
-  },
-];
-
-export default function ProductTable() {
+export default function ProductTable({ rows }) {
   const router = useRouter();
+  const { adminProductsDispatch, productDispatch } = useContext(GlobalContext);
+  const HandleDeleteProduct = async (id) => {
+    const res = await deleteAdminProducts(productsDispatch, id);
+  };
   return (
     <TableContainer sx={{ background: "#fff", borderRadius: 3 }}>
       <div
@@ -53,13 +34,14 @@ export default function ProductTable() {
           padding: 15,
         }}
       >
-        <Typography fontWeight={600}>All Products (10/10)</Typography>
+        <Typography fontWeight={600}>All Products ({rows.length})</Typography>
         <Button>See all</Button>
       </div>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell>Products</TableCell>
+            <TableCell align="center">Name</TableCell>
             <TableCell align="center">Quantity</TableCell>
             <TableCell align="right">Action</TableCell>
           </TableRow>
@@ -68,9 +50,9 @@ export default function ProductTable() {
           {rows.map((row, i) => (
             <TableRow
               key={i}
-              onClick={() => {
-                router.push("/dashboard/orders/view/" + 34567);
-              }}
+              // onClick={() => {
+              //   router.push("/dashboard/orders/view/" + 34567);
+              // }}
               sx={{
                 "&:last-child td, &:last-child th": { border: 0 },
                 cursor: "pointer",
@@ -80,16 +62,38 @@ export default function ProductTable() {
             >
               <TableCell>
                 <img
-                  src={row.img}
-                  style={{ width: 40, height: 40, objectFit: "contain" }}
+                  src={row.pictures[0]?.url}
+                  style={{
+                    width: 40,
+                    height: 40,
+                    objectFit: "cover",
+                    borderRadius: 10,
+                  }}
                 />
               </TableCell>
-              <TableCell align="center">{row.quantity}</TableCell>
+              <TableCell align="center">{row.title}</TableCell>
+              <TableCell align="center">{row.quantityAvailable}</TableCell>
               <TableCell align="right">
-                <ButtonBase>
+                <ButtonBase
+                  onClick={() => {
+                    HandleDeleteProduct(row.id);
+                  }}
+                >
                   <RemoveIcon
-                    style={{ background: "#aaa", borderRadius: 20 }}
+                    style={{
+                      background: "red",
+                      borderRadius: 20,
+                      color: "#fff",
+                    }}
                   />
+                </ButtonBase>
+                <ButtonBase
+                  onClick={() => {
+                    router.push("/dashboard/products/edit/" + row.id);
+                  }}
+                  sx={{ marginLeft: 3 }}
+                >
+                  <EditIcon style={{ background: "#aaa", borderRadius: 20 }} />
                 </ButtonBase>
               </TableCell>
             </TableRow>

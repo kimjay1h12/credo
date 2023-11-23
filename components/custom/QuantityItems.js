@@ -40,6 +40,7 @@ const CartQuantityButton = ({
   quantity = 0,
   handleChange,
   size = "medium",
+  max,
 }) => {
   const classes = useStyles({ size });
 
@@ -59,6 +60,7 @@ const CartQuantityButton = ({
       </div>
       <ButtonBase
         className={classes.buttonBase}
+        disabled={quantity === max}
         onClick={() => handleChange(quantity + 1)}
       >
         <AddIcon />

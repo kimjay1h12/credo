@@ -5,6 +5,9 @@ import { getCart } from "./actions/cart";
 import authReducer, { defaultAuth } from "./reducers/authReducer";
 import cartReducer, { defaultCart } from "./reducers/cartReducer";
 import genericReducer, { defaultData } from "./reducers/genericReducer";
+import collectionReducer, {
+  defaultCollections,
+} from "./reducers/collectionReducer";
 const genericData = {
   error: null,
   loading: false,
@@ -13,44 +16,79 @@ const genericData = {
 export const GlobalContext = React.createContext({
   authState: defaultAuth,
   authDispatch: () => {},
-
-  bankState: defaultData,
-
+  productState: defaultData,
+  productDispatch: () => {},
+  // productState: defaultData,
+  cartegoryState: defaultData,
+  cartegoryDispatch: () => {},
+  collectionsState: defaultData,
+  collectionsDispatch: () => {},
   cartState: defaultCart,
   cartDispatch: () => {},
+  customerState: defaultData,
+  customerDispatch: () => {},
+  adminProductsState: defaultData,
+  adminProductsDispatch: () => {},
 });
 
 export default function GlobalProvider({ children }) {
   const [authState, authDispatch] = useReducer(authReducer, defaultAuth);
 
-  const [bankState, bankDispatch] = useReducer(genericReducer, defaultData);
+  const [productState, productDispatch] = useReducer(
+    genericReducer,
+    defaultData
+  );
+  // const [productState, productDispatch] = useReducer(genericReducer, defaultData);
 
   // const [cartbadge, setCartbadge] = useState(0);
   const [cartState, cartDispatch] = useReducer(cartReducer, defaultData);
+  const [cartegoryState, cartegoryDispatch] = useReducer(
+    genericReducer,
+    defaultData
+  );
+  const [adminProductsState, adminProductsDispatch] = useReducer(
+    genericReducer,
+    defaultData
+  );
+  const [customerState, customerDispatch] = useReducer(
+    genericReducer,
+    defaultData
+  );
+  const [collectionsState, collectionsDispatch] = useReducer(
+    genericReducer,
+    defaultData
+  );
   useEffect(() => {
     getCurrentUser(authDispatch);
-    getCart(cartDispatch);
+    // getCart(cartDispatch);
   }, []);
 
-  useEffect(() => {
-    (async () => {
-      const banks = (await client.get("payment/banks")).data;
-      bankDispatch({
-        type: "FETCHED_DATA",
-        payload: banks.data,
-      });
-    })();
-  }, []);
+  // useEffect(() => {
+  //   (async () => {
+  //     const products = (await client.get("payment/products")).data;
+  //     productDispatch({
+  //       type: "FETCHED_DATA",
+  //       payload: products.data,
+  //     });
+  //   })();
+  // }, []);
   return (
     <GlobalContext.Provider
       value={{
         authState,
         authDispatch,
-
-        bankState,
-
+        productState,
+        productDispatch,
         cartState,
         cartDispatch,
+        cartegoryDispatch,
+        cartegoryState,
+        collectionsState,
+        collectionsDispatch,
+        adminProductsState,
+        adminProductsDispatch,
+        customerDispatch,
+        customerState,
       }}
     >
       {children}

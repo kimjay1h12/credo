@@ -9,39 +9,19 @@ import Paper from "@mui/material/Paper";
 import { Button, Typography, ButtonBase } from "@mui/material";
 import { useRouter } from "next/router";
 import RemoveIcon from "@mui/icons-material/Remove";
+import { GlobalContext } from "../../context";
+import { deleteAdminCollections } from "../../context/actions/collectionAction";
 
 function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
 }
 
-const rows = [
-  {
-    img: "/img/test.png",
-    quantity: "1 in stock",
-  },
-  {
-    img: "/img/test.png",
-    quantity: "1 in stock",
-  },
-  {
-    img: "/img/test.png",
-    quantity: "1 in stock",
-  },
-  {
-    img: "/img/test.png",
-    quantity: "1 in stock",
-  },
-  {
-    img: "/img/test.png",
-    quantity: "1 in stock",
-  },
-  {
-    img: "/img/test.png",
-    quantity: "1 in stock",
-  },
-];
-
-export default function CollectionsTable() {
+export default function CollectionsTable({ row }) {
+  const { cartegoryDispatch, collectionsDispatch } =
+    React.useContext(GlobalContext);
+  const HandleDelete = async (id) => {
+    const res = await deleteAdminCollections(collectionsDispatch, id);
+  };
   const router = useRouter();
   return (
     <TableContainer sx={{ background: "#fff", borderRadius: 3 }}>
@@ -53,8 +33,8 @@ export default function CollectionsTable() {
           padding: 15,
         }}
       >
-        <Typography fontWeight={600}>All Products (10/10)</Typography>
-        <Button>See all</Button>
+        <Typography fontWeight={600}>All Category ({row?.length})</Typography>
+        {/* <Button>See all</Button> */}
       </div>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
@@ -65,12 +45,9 @@ export default function CollectionsTable() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row, i) => (
+          {row.map((row, i) => (
             <TableRow
               key={i}
-              onClick={() => {
-                router.push("/dashboard/orders/view/" + 34567);
-              }}
               sx={{
                 "&:last-child td, &:last-child th": { border: 0 },
                 cursor: "pointer",
@@ -80,13 +57,22 @@ export default function CollectionsTable() {
             >
               <TableCell>
                 <img
-                  src={row.img}
-                  style={{ width: 40, height: 40, objectFit: "contain" }}
+                  src={row.image}
+                  style={{
+                    width: 40,
+                    height: 40,
+                    objectFit: "cover",
+                    borderRadius: 10,
+                  }}
                 />
               </TableCell>
-              <TableCell align="center">{row.quantity}</TableCell>
+              <TableCell align="center">{row.title}</TableCell>
               <TableCell align="right">
-                <ButtonBase>
+                <ButtonBase
+                  onClick={() => {
+                    HandleDelete(row.id);
+                  }}
+                >
                   <RemoveIcon
                     style={{ background: "#aaa", borderRadius: 20 }}
                   />

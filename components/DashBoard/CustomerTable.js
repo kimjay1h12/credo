@@ -6,32 +6,34 @@ import { DataGrid } from "@mui/x-data-grid";
 const columns = [
   { field: "id", headerName: "ID", width: 90 },
   {
-    field: "firstName",
+    // field: "firstName",
     headerName: "First name",
-    width: 150,
+    width: 200,
     editable: true,
+    valueGetter: (params) => `${params?.row?.customer?.fullName}`,
   },
   {
     field: "lastName",
-    headerName: "Last name",
-    width: 150,
+    headerName: "Email",
+    width: 200,
     editable: true,
+    valueGetter: (params) => `${params?.row?.customer?.email}`,
   },
   {
     field: "age",
-    headerName: "Age",
+    headerName: "Verified",
     type: "number",
-    width: 110,
+    width: 150,
     editable: true,
+    valueGetter: (params) => `${params?.row?.customer?.emailIsVerified}`,
   },
   {
     field: "fullName",
-    headerName: "Full name",
+    headerName: "IsAdmin",
     description: "This column has a value getter and is not sortable.",
     sortable: false,
-    width: 160,
-    valueGetter: (params) =>
-      `${params.row.firstName || ""} ${params.row.lastName || ""}`,
+    width: 150,
+    valueGetter: (params) => `${params?.row?.customer?.isAdmin}`,
   },
 ];
 
@@ -47,14 +49,19 @@ const rows = [
   { id: 9, lastName: "Roxie", firstName: "Harvey", age: 65 },
 ];
 
-export default function CustomerTable() {
+export default function CustomerTable({ array }) {
   return (
     <Box
-      sx={{ height: 400, width: "100%", background: "#fff", borderRadius: 2 }}
+      sx={{
+        minHeight: 300,
+        width: "100%",
+        background: "#fff",
+        borderRadius: 2,
+      }}
     >
       <Typography p={2}>All customers</Typography>
       <DataGrid
-        rows={rows}
+        rows={array}
         columns={columns}
         initialState={{
           pagination: {

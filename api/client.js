@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const config = {
-  baseURL: "https://agbero-be.onrender.com/api/",
+  baseURL: "https://credoculture-api.up.railway.app/",
 };
 
 let token;

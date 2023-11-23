@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import MiniDrawer from "../../../../layouts/Drawer";
 import { makeStyles } from "@mui/styles";
 import {
@@ -10,7 +10,13 @@ import {
   Checkbox,
   FormGroup,
   Button,
+  CardMedia,
+  CardContent,
+  Card,
+  CircularProgress,
 } from "@mui/material";
+import { createAdminCategory } from "../../../../context/actions/categoryAction";
+import { GlobalContext } from "../../../../context";
 const useStyles = makeStyles({
   root: {
     padding: 50,
@@ -24,6 +30,24 @@ const useStyles = makeStyles({
   },
 });
 function Index() {
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [previewImage, setPreviewImage] = useState(null);
+  const isImage = (file) => file && file.type.startsWith("image/");
+
+  const [title, setTitle] = useState("");
+  const [loading, setLoading] = useState(false);
+  const { cartDispatch, cartegoryDispatch } = useContext(GlobalContext);
+  const handleCreateCategory = async () => {
+    setLoading(true);
+
+    const res = await createAdminCategory(cartegoryDispatch, {
+      title: title,
+    });
+    if (res) {
+      alert("Category Created Successfully");
+    }
+    setLoading(false);
+  };
   const classes = useStyles();
   return (
     <MiniDrawer active={"category"}>
@@ -35,7 +59,11 @@ function Index() {
           <Grid item xs={20} md={7}>
             <div className={classes.content}>
               <TextField
-                style={{ marginBottom: 20 }}
+                value={title}
+                onChange={(e) => {
+                  setTitle(e.target.value);
+                }}
+                style={{ marginBottom: 10 }}
                 label="Title"
                 fullWidth
                 size="small"
@@ -51,10 +79,14 @@ function Index() {
           }}
         >
           <Button
+            disabled={title === ""}
+            onClick={() => {
+              handleCreateCategory();
+            }}
             size="small"
             sx={{ backgroundColor: "#1872F6", color: "#fff", marginTop: 2 }}
           >
-            Create Category
+            {loading ? <CircularProgress /> : " Create Category"}
           </Button>
         </div>
       </div>

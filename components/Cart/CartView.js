@@ -19,7 +19,8 @@ const useStyles = makeStyles({
       position: "absolute",
       top: 20,
       right: 20,
-      maxWidth: 400,
+      width: "100%",
+      maxWidth: 500,
     },
   },
   row: {
@@ -30,7 +31,8 @@ const useStyles = makeStyles({
   },
 });
 
-const TopRightDialog = ({ open, onClose, message }) => {
+const TopRightDialog = ({ open, onClose, message, data }) => {
+  console.log("cartState", data);
   const classes = useStyles();
   const router = useRouter();
   return (
@@ -55,9 +57,10 @@ const TopRightDialog = ({ open, onClose, message }) => {
           Cart
         </Typography>
         <div>
-          <CartItem />
-          <CartItem />
-          <CartItem />
+          {data?.map((cur, i) => (
+            <CartItem key={i} {...cur} />
+          ))}
+
           <Button
             size="large"
             sx={{ marginTop: 4 }}

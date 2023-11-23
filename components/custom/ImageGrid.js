@@ -2,6 +2,7 @@
 
 import React from "react";
 import { makeStyles } from "@mui/styles";
+import { getRandomItems } from "../../utility";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -10,7 +11,13 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
     overflowX: "auto",
     marginTop: 40,
-    marginBottom: 30 /* Enable horizontal scrolling on mobile */,
+
+    marginBottom: 30,
+    ["@media (min-width : 1200px)"]: {
+      // marginTop: "100px",
+      padding: 30,
+    },
+    /* Enable horizontal scrolling on mobile */
   },
   imageContainer: {
     width:
@@ -23,13 +30,14 @@ const useStyles = makeStyles((theme) => ({
   centerImage: {
     marginTop: "0px",
     ["@media (min-width : 1200px)"]: {
-      marginTop: "80px",
+      marginTop: "100px",
     },
   },
   image: {
     width: "100%",
-    height: "auto",
+    height: 500,
     display: "block",
+    objectFit: "cover",
   },
   mobileImageContainer: {
     width: "100%" /* Each container takes 100% of the width in mobile view */,
@@ -41,24 +49,26 @@ const ImageGrid = ({ images }) => {
 
   return (
     <div className={classes.container}>
-      {images.map((image, index) => (
-        <div
-          key={index}
-          className={`${classes.imageContainer} ${
-            index === 1 ? classes.centerImage : ""
-          } ${
-            typeof window !== "undefined" && window.innerWidth <= 768
-              ? classes.mobileImageContainer
-              : ""
-          }`}
-        >
-          <img
-            src={image}
-            alt={`Image ${index + 1}`}
-            className={classes.image}
-          />
-        </div>
-      ))}
+      {getRandomItems(images)
+        ?.splice(0, 3)
+        ?.map((image, index) => (
+          <div
+            key={index}
+            className={`${classes.imageContainer} ${
+              index === 1 ? classes.centerImage : ""
+            } ${
+              typeof window !== "undefined" && window.innerWidth <= 768
+                ? classes.mobileImageContainer
+                : ""
+            }`}
+          >
+            <img
+              src={image.image}
+              alt={`Image ${index + 1}`}
+              className={classes.image}
+            />
+          </div>
+        ))}
     </div>
   );
 };

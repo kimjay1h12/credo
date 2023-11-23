@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Typography, Button } from "@mui/material";
 import MiniDrawer from "../../../layouts/Drawer";
 import { makeStyles } from "@mui/styles";
 import ProductTable from "../../../components/DashBoard/ProductTable";
 import { useRouter } from "next/router";
 import CategoryTable from "../../../components/DashBoard/CategoryTable";
+import { GlobalContext } from "../../../context";
+import { useEffect } from "react";
+import { getAllCategory } from "../../../context/actions/categoryAction";
 const useStyles = makeStyles({
   root: {
     padding: 50,
@@ -19,6 +22,14 @@ const useStyles = makeStyles({
 function Index() {
   const router = useRouter();
   const classes = useStyles();
+  const {
+    cartegoryState: { data },
+    cartegoryDispatch,
+  } = useContext(GlobalContext);
+  useEffect(() => {
+    getAllCategory(cartegoryDispatch);
+  }, []);
+
   return (
     <MiniDrawer active={"category"}>
       <div className={classes.root}>
@@ -37,7 +48,7 @@ function Index() {
             Add Category
           </Button>
         </div>
-        <CategoryTable />
+        <CategoryTable data={data} />
       </div>
     </MiniDrawer>
   );
