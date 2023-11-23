@@ -6,6 +6,8 @@ import ProductTable from "../../../components/DashBoard/ProductTable";
 import { useRouter } from "next/router";
 import CustomerTable from "../../../components/DashBoard/CustomerTable";
 import DashItem from "../../../components/DashBoard/DashItem";
+import { useContext } from "react";
+import { GlobalContext } from "../../../context";
 const useStyles = makeStyles({
   root: {
     padding: 50,
@@ -23,45 +25,46 @@ const useStyles = makeStyles({
   },
 });
 function Index() {
+  const {
+    adminProductsState,
+    customerState,
+    collectionsState,
+    cartegoryState,
+  } = useContext(GlobalContext);
   const router = useRouter();
   const headerArray = [
     {
-      label: "Visitors online",
+      label: "Customers",
       icon: "/img/dash.png",
-      value: "5",
+      value: customerState?.data?.length,
     },
     {
-      label: "Pages viewed",
+      label: "Collections",
       icon: "/img/dash2.png",
-      value: "12",
+      value: collectionsState?.data?.length,
     },
     {
-      label: "Pages viewed",
-      icon: "/img/dash2.png",
-      value: "12",
-    },
-    {
-      label: "Pages viewed",
-      icon: "/img/dash2.png",
-      value: "12",
-    },
-    {
-      label: "Pages viewed",
-      icon: "/img/dash2.png",
-      value: "12",
-    },
-    {
-      label: "Pages viewed",
-      icon: "/img/dash2.png",
-      value: "12",
-    },
-    {
-      label: "Total sales",
+      label: "Categories",
       icon: "/img/dash3.png",
-      value: "150",
+      value: cartegoryState?.data?.length,
+    },
+    {
+      label: "Total Products",
+      icon: "/img/dash3.png",
+      value: adminProductsState?.data?.length,
     },
     {
       label: "Total orders",
+      icon: "/img/dash4.png",
+      value: "5",
+    },
+    {
+      label: "Total Payments",
+      icon: "/img/dash4.png",
+      value: "5",
+    },
+    {
+      label: "Total Sales",
       icon: "/img/dash4.png",
       value: "5",
     },
