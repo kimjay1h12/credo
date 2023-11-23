@@ -56,17 +56,17 @@ function Index() {
     {
       label: "Total orders",
       icon: "/img/dash4.png",
-      value: "5",
+      value: "0",
     },
     {
       label: "Total Payments",
       icon: "/img/dash4.png",
-      value: "5",
+      value: "0",
     },
     {
       label: "Total Sales",
       icon: "/img/dash4.png",
-      value: "5",
+      value: "0",
     },
   ];
   const classes = useStyles();
