@@ -215,6 +215,7 @@ function Index() {
                 {formData.imageUrls?.length > 0 &&
                   formData.imageUrls?.map((cur, i) => (
                     <Card
+                      key={i}
                       sx={{
                         maxWidth: "33%",
                         marginTop: 2,
