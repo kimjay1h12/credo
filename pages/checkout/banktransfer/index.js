@@ -84,7 +84,7 @@ function Index() {
     setLoading(true);
     if (!product?.length > 0) {
       const res = await UpdateOrderPayment(product.id, {
-        paymentMethod: paymentMethod,
+        paymentMethod: "bank",
         paymentProofUrl: imageUrl,
         paymentReference: reference?.trans?.toString(),
         paymentStatus: "paid",
@@ -98,7 +98,7 @@ function Index() {
           return cur.id;
         }),
 
-        paymentMethod: paymentMethod,
+        paymentMethod: "bank",
         paymentProofUrl: imageUrl,
         // paymentReference: "",
         paymentStatus: "paid",
