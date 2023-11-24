@@ -197,10 +197,7 @@ function AppToolbar({ route, children, background, opencart = false }) {
         {!authState?.loggedIn && (
           <Button
             onClick={() => {
-              const r = logoutHandler(authDispatch);
-              if (r) {
-                router.push("/");
-              }
+              router.push("/auth/login");
             }}
             variant="contained"
             size="small"
