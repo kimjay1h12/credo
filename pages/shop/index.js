@@ -1,5 +1,5 @@
 import { makeStyles } from "@mui/styles";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import MainLayout from "../../layouts/Mainlayouts";
 import {
   Button,
@@ -12,6 +12,7 @@ import {
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import ProductsItem from "../../components/Products/ProductsItem";
 import { GlobalContext } from "../../context";
+import client from "../../api/client";
 const useStyles = makeStyles({
   root: {
     padding: 15,
@@ -51,9 +52,10 @@ const useStyles = makeStyles({
 });
 function Index() {
   const {
-    productState: { data },
+    // productState: { data },
   } = useContext(GlobalContext);
   const [page, setPage] = useState(15);
+  const [data, setData] = useState([]);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -62,6 +64,34 @@ function Index() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const getAllUserProducts = async (query = "price.asc") => {
+    // dispatch({
+    //   type: "LOADING",
+    // });
+    try {
+      const p = (
+        await client.get(
+          `/api/v1/Product/getAllProducts?pageSize=10000&${query}`
+        )
+      ).data;
+      console.log(p.data);
+      setData(p.data);
+      // dispatch({
+      //   type: "FETCHED_DATA",
+      //   payload: p.data,
+      // });
+      // console.log("products", p.data);
+    } catch (error) {
+      // dispatch({
+      //   type: "ERROR",
+      //   payload: error.response?.data?.message || "Couldn't get cart",
+      // });
+      console.log("Error all products", error.response);
+    }
+  };
+  useEffect(() => {
+    getAllUserProducts();
+  }, []);
 
   const classes = useStyles();
   return (
@@ -93,22 +123,6 @@ function Index() {
                 borderColor: "#000",
                 borderWidth: 0.5,
                 borderStyle: "solid",
-              }}
-            >
-              <Typography>USD</Typography>
-              {/* <KeyboardArrowDownIcon /> */}
-            </ButtonBase>
-            <ButtonBase
-              style={{
-                height: 40,
-                width: 50,
-                display: "flex",
-                // flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "center",
-                borderColor: "#000",
-                borderWidth: 0.5,
-                borderStyle: "solid",
                 background: "#000",
                 color: "#fff",
               }}
@@ -126,9 +140,9 @@ function Index() {
               "aria-labelledby": "basic-button",
             }}
           >
-            <MenuItem onClick={handleClose}>2000</MenuItem>
-            <MenuItem onClick={handleClose}>4000</MenuItem>
-            <MenuItem onClick={handleClose}>6000</MenuItem>
+            <MenuItem onClick={handleClose}>High</MenuItem>
+            <MenuItem onClick={handleClose}>Low</MenuItem>
+            {/* <MenuItem onClick={handleClose}>6000</MenuItem> */}
           </Menu>
         </div>
         <div>
