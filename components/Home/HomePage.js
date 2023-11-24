@@ -131,7 +131,14 @@ function HomePage() {
           className={classes.center}
           style={{ marginTop: 30, marginBottom: 50 }}
         >
-          <Button variant="contained">Shop Now</Button>
+          <Button
+            onClick={() => {
+              router.push("/shop");
+            }}
+            variant="contained"
+          >
+            Shop Now
+          </Button>
         </div>
         <div className={classes.center}>
           <Typography fontWeight={600} variant="h6">
