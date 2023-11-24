@@ -19,6 +19,9 @@ const theme = createTheme({
         fontWeight: 700,
       },
     },
+    typography: {
+      fontFamily: "Rolaxs",
+    },
     MuiButton: {
       defaultProps: {
         disableElevation: true,

@@ -4,10 +4,21 @@
   margin: 0;
 
 }
+@font-face {
+  font-family: 'Rolaxs';
+  src: url('/fonts/Rolaxs.woff?v=1.0') format('woff'),
+    url('/fonts/Rolaxs.woff2?v=1.0') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
 
 body {
-  background:#fff;
+  font-family: 'Rolaxs';
+  background: #fff;
 }
+/* body {
+  background:#fff;
+} */
 
 .number-count-animation {
   animation: countUpAnimation 2s ease-in-out;
