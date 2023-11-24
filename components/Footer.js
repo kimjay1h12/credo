@@ -126,6 +126,7 @@ function Footer() {
               {[...data]?.splice(0, 5)?.map((cur, i) => (
                 // <ButtonBase key={i}>
                 <Typography
+                  key={i}
                   sx={{ cursor: "pointer" }}
                   onClick={() => {
                     router.push("/collections/" + cur.id);
