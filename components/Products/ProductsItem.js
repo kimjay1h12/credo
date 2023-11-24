@@ -12,6 +12,13 @@ const useStyles = makeStyles({
 
     borderRadius: 10,
     cursor: "pointer",
+  },
+
+  img: {
+    height: 160,
+    width: "100%",
+    objectFit: "contain",
+    borderRadius: 10,
     "&:hover": {
       background: "#FCFCFC",
       boxShadow: "1px 1px 1px 1px rgba(0, 0, 0, 0.1)",
@@ -19,13 +26,6 @@ const useStyles = makeStyles({
     "&::active": {
       background: "#FCFCFC",
     },
-  },
-
-  img: {
-    height: 160,
-    width: "100%",
-    objectFit: "cover",
-    borderRadius: 10,
     ["@media (min-width : 1200px)"]: {
       height: 200,
     },
