@@ -160,7 +160,7 @@ function Index() {
                 <Typography variant="h6" fontWeight={800}>
                   {currencyFormatter(productDetails?.price)}
                 </Typography>
-                <Typography gutterBottom mt={3}>
+                <Typography fontFamily="revert-layer" gutterBottom mt={3}>
                   Size
                 </Typography>
                 <div className={classes.row}>

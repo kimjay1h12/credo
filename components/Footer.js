@@ -46,7 +46,7 @@ function Footer() {
     try {
       const res = (
         await client.post("/api/v1/Subscribe/joinCommunity", {
-          email: "string",
+          email: email,
         })
       ).data;
       setEmail("");

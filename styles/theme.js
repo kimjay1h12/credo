@@ -1,6 +1,9 @@
 import { createTheme } from "@mui/material/styles";
 
 const theme = createTheme({
+  typography: {
+    fontFamily: "main, Arial, sans-serif",
+  },
   components: {
     MuiDialog: {
       styleOverrides: {
@@ -19,8 +22,10 @@ const theme = createTheme({
         fontWeight: 700,
       },
     },
-    typography: {
-      fontFamily: "Rolaxs",
+    MuiTypography: {
+      styleOverrides: {
+        fontFamily: "revert-layer",
+      },
     },
     MuiButton: {
       defaultProps: {

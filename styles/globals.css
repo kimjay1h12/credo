@@ -5,7 +5,7 @@
 
 }
 @font-face {
-  font-family: 'Rolaxs';
+  font-family: 'main';
   src: url('/fonts/Rolaxs.woff?v=1.0') format('woff'),
     url('/fonts/Rolaxs.woff2?v=1.0') format('woff2');
   font-weight: normal;
@@ -13,7 +13,7 @@
 }
 
 body {
-  font-family: 'Rolaxs';
+  font-family: 'main';
   background: #fff;
 }
 /* body {
