@@ -21,6 +21,7 @@ import { useRouter } from "next/router";
 import { useContext, useState } from "react";
 import TopRightDialog from "./Cart/CartView";
 import { GlobalContext } from "../context";
+import { logoutHandler } from "../context/actions/auth";
 // import SignUp from "./Section/SignUp";
 
 const useStyles = makeStyles({
@@ -128,7 +129,7 @@ function AppToolbar({ route, children, background, opencart = false }) {
   const classes = useStyles();
   const [menuOpen, setMenuOpen] = useState(false);
   const login = "/login";
-  const { cartState } = useContext(GlobalContext);
+  const { cartState, authDispatch } = useContext(GlobalContext);
   const routes = [
     {
       href: "/",
@@ -192,6 +193,19 @@ function AppToolbar({ route, children, background, opencart = false }) {
             </a>
           </li>
         ))}
+        <Button
+          onClick={() => {
+            const r = logoutHandler(authDispatch);
+            if (r) {
+              router.push("/");
+            }
+          }}
+          variant="contained"
+          size="small"
+          color="error"
+        >
+          Log Out
+        </Button>
       </ul>
     </div>
   );
@@ -231,6 +245,20 @@ function AppToolbar({ route, children, background, opencart = false }) {
                   </a>
                 </li>
               ))}
+              <Button
+                style={{ marginLeft: 10, fontSize: 10 }}
+                variant="contained"
+                size="small"
+                color="error"
+                onClick={() => {
+                  const r = logoutHandler(authDispatch);
+                  if (r) {
+                    router.push("/");
+                  }
+                }}
+              >
+                Log Out
+              </Button>
             </ul>
           </div>
         </Hidden>
