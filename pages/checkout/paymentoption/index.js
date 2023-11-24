@@ -269,20 +269,21 @@ function Index() {
                   router.push({
                     pathname: "/checkout/bitcoin",
                     query: {
-                      data: JSON.stringify({
-                        ...product,
-                        paymentMethod: paymentMethod,
-                      }),
+                      data: JSON.stringify(
+                        [...product]
+                        // paymentMethod: paymentMethod,
+                      ),
                     },
                   });
                 } else {
                   router.push({
                     pathname: "/checkout/banktransfer",
                     query: {
-                      data: JSON.stringify({
-                        ...product,
-                        paymentMethod: paymentMethod,
-                      }),
+                      data: JSON.stringify(
+                        [...product]
+
+                        // paymentMethod: paymentMethod,
+                      ),
                     },
                   });
                 }

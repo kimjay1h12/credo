@@ -60,7 +60,7 @@ const useStyles = makeStyles({
 function Index() {
   const router = useRouter();
   const classes = useStyles();
-  const [product, setProduct] = useState({});
+  const [product, setProduct] = useState([]);
   const { data } = router.query;
   // console.log(JSON?.parse(data));
   // const product = JSON?.parse(data);
@@ -80,11 +80,12 @@ function Index() {
     // console.log(url);
     setImageUploading(false);
   };
+  console.log(product, "product");
   const HandleCreateOrder = async () => {
     setLoading(true);
     if (!product?.length > 0) {
       const res = await UpdateOrderPayment(product.id, {
-        paymentMethod: "bitcoin",
+        paymentMethod: "crypto",
         paymentProofUrl: imageUrl,
         // paymentReference: reference?.trans?.toString(),
         paymentStatus: "paid",
@@ -94,11 +95,11 @@ function Index() {
       }
     } else {
       const res = await UpdateOrderCheckoutPayment({
-        orderId: product.map((cur) => {
+        orderId: product?.map((cur) => {
           return cur.id;
         }),
 
-        paymentMethod: "bitcoin",
+        paymentMethod: "crypto",
         paymentProofUrl: imageUrl,
         // paymentReference: "",
         paymentStatus: "paid",

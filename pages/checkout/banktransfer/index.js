@@ -84,9 +84,9 @@ function Index() {
     setLoading(true);
     if (!product?.length > 0) {
       const res = await UpdateOrderPayment(product.id, {
-        paymentMethod: "bank",
+        paymentMethod: "transfer",
         paymentProofUrl: imageUrl,
-        paymentReference: reference?.trans?.toString(),
+        // paymentReference: reference?.trans?.toString(),
         paymentStatus: "paid",
       });
       if (res) {
@@ -94,11 +94,11 @@ function Index() {
       }
     } else {
       const res = await UpdateOrderCheckoutPayment({
-        orderId: product.map((cur) => {
+        orderId: product?.map((cur) => {
           return cur.id;
         }),
 
-        paymentMethod: "bank",
+        paymentMethod: "transfer",
         paymentProofUrl: imageUrl,
         // paymentReference: "",
         paymentStatus: "paid",
