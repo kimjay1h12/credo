@@ -13,11 +13,11 @@ const useStyles = makeStyles({
     borderRadius: 10,
     cursor: "pointer",
     "&:hover": {
-      background: "#f7f7f7",
-      boxShadow: "5px 5px 10px rgba(0, 0, 0, 0.1)",
+      background: "#FCFCFC",
+      boxShadow: "1px 1px 1px 1px rgba(0, 0, 0, 0.1)",
     },
     "&::active": {
-      background: "#f7f7f7",
+      background: "#FCFCFC",
     },
   },
 
