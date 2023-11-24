@@ -11,6 +11,7 @@ import {
   Hidden,
   IconButton,
   Toolbar,
+  Typography,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { Box } from "@mui/system";
@@ -129,7 +130,7 @@ function AppToolbar({ route, children, background, opencart = false }) {
   const classes = useStyles();
   const [menuOpen, setMenuOpen] = useState(false);
   const login = "/login";
-  const { cartState, authDispatch } = useContext(GlobalContext);
+  const { cartState, authDispatch, authState } = useContext(GlobalContext);
   const routes = [
     {
       href: "/",
@@ -193,19 +194,36 @@ function AppToolbar({ route, children, background, opencart = false }) {
             </a>
           </li>
         ))}
-        <Button
-          onClick={() => {
-            const r = logoutHandler(authDispatch);
-            if (r) {
-              router.push("/");
-            }
-          }}
-          variant="contained"
-          size="small"
-          color="error"
-        >
-          Log Out
-        </Button>
+        {!authState?.loggedIn && (
+          <Button
+            onClick={() => {
+              const r = logoutHandler(authDispatch);
+              if (r) {
+                router.push("/");
+              }
+            }}
+            variant="contained"
+            size="small"
+            style={{ marginBottom: 10 }}
+          >
+            Log In
+          </Button>
+        )}
+        {authState?.loggedIn && (
+          <Button
+            onClick={() => {
+              const r = logoutHandler(authDispatch);
+              if (r) {
+                router.push("/");
+              }
+            }}
+            variant="contained"
+            size="small"
+            color="error"
+          >
+            Log Out
+          </Button>
+        )}
       </ul>
     </div>
   );
@@ -245,20 +263,22 @@ function AppToolbar({ route, children, background, opencart = false }) {
                   </a>
                 </li>
               ))}
-              <Button
-                style={{ marginLeft: 10, fontSize: 10 }}
-                variant="contained"
-                size="small"
-                color="error"
-                onClick={() => {
-                  const r = logoutHandler(authDispatch);
-                  if (r) {
-                    router.push("/");
-                  }
-                }}
-              >
-                Log Out
-              </Button>
+              {authState?.loggedIn && (
+                <Button
+                  style={{ marginLeft: 10, fontSize: 10 }}
+                  variant="contained"
+                  size="small"
+                  color="error"
+                  onClick={() => {
+                    const r = logoutHandler(authDispatch);
+                    if (r) {
+                      router.push("/");
+                    }
+                  }}
+                >
+                  Log Out
+                </Button>
+              )}
             </ul>
           </div>
         </Hidden>
@@ -297,7 +317,25 @@ function AppToolbar({ route, children, background, opencart = false }) {
               }}
             >
               <SearchIcon />
-              <PersonIcon />
+              {authState.loggedIn ? (
+                <div style={{ display: "flex", flexDirection: "column" }}>
+                  <Typography variant="caption">
+                    {authState?.data?.user?.fullName}
+                  </Typography>
+                  <Typography variant="caption">
+                    {authState?.data?.user?.email}
+                  </Typography>
+                </div>
+              ) : (
+                <ButtonBase
+                  onClick={() => {
+                    router.push("/auth/login");
+                  }}
+                >
+                  <PersonIcon />
+                </ButtonBase>
+              )}
+
               <Badge
                 badgeContent={cartState?.data?.length || 0}
                 color="primary"

@@ -149,7 +149,7 @@ function Index() {
             </Typography>
             <ButtonBase
               onClick={() => {
-                router.push("/");
+                router.push("/auth/login");
               }}
             >
               Sign In

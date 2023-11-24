@@ -7,15 +7,7 @@ function Landing() {
   const { authState } = useContext(GlobalContext);
   console.log("authstate", authState.data);
   // return <Dashboard />;
-  return authState.loggedIn ? (
-    authState?.data?.user?.isAdmin ? (
-      <Dashboard />
-    ) : (
-      <HomePage />
-    )
-  ) : (
-    <Index />
-  );
+  return authState?.data?.user?.isAdmin ? <Dashboard /> : <HomePage />;
 }
 
 export default Landing;

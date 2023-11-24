@@ -64,7 +64,10 @@ function Index() {
   const [quantity, setQuantity] = useState(1);
   const router = useRouter();
   const { uid } = router.query;
-  const { cartDispatch } = useContext(GlobalContext);
+  const {
+    cartDispatch,
+    authState: { data, loggedIn },
+  } = useContext(GlobalContext);
   // console.log(uid, router.query);
   const [selectedSize, setSelectedSize] = useState("s");
   const [loading, setLoading] = useState(false);
@@ -204,23 +207,31 @@ function Index() {
                     variant="contained"
                     size="large"
                     onClick={() => {
-                      AddItemToCart(uid);
+                      if (loggedIn) {
+                        AddItemToCart(uid);
+                      } else {
+                        router.push("/auth/login");
+                      }
                     }}
                   >
                     {cartLoading ? <CircularProgress /> : "ADD TO CART"}
                   </Button>
                   <Button
                     onClick={() => {
-                      router.push({
-                        pathname: "/checkout",
-                        query: {
-                          data: JSON.stringify({
-                            ...productDetails,
-                            size: selectedSize,
-                            noOfItems: quantity,
-                          }),
-                        },
-                      });
+                      if (loggedIn) {
+                        router.push({
+                          pathname: "/checkout",
+                          query: {
+                            data: JSON.stringify({
+                              ...productDetails,
+                              size: selectedSize,
+                              noOfItems: quantity,
+                            }),
+                          },
+                        });
+                      } else {
+                        router.push("/auth/login");
+                      }
                     }}
                     size="large"
                     fullWidth

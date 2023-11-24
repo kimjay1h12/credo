@@ -61,7 +61,9 @@ function Index() {
   const HandleSignIn = async () => {
     setLoading(true);
     const res = await signInHandler(formData, authDispatch);
-
+    if (res) {
+      router.push("/");
+    }
     setLoading(false);
   };
 
