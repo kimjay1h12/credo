@@ -1,6 +1,17 @@
-import { Button, Grid, TextField, Typography } from "@mui/material";
+import {
+  Button,
+  ButtonBase,
+  CircularProgress,
+  Grid,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import React from "react";
+import React, { useContext } from "react";
+import { useState } from "react";
+import client from "../api/client";
+import { GlobalContext } from "../context";
+import { useRouter } from "next/router";
 const useStyles = makeStyles({
   root: {
     minHeight: "30vh",
@@ -24,6 +35,30 @@ const useStyles = makeStyles({
 });
 function Footer() {
   const classes = useStyles();
+  const {
+    collectionsState: { data },
+  } = useContext(GlobalContext);
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const HandleJoinCommunity = async () => {
+    setLoading(true);
+    try {
+      const res = (
+        await client.post("/api/v1/Subscribe/joinCommunity", {
+          email: "string",
+        })
+      ).data;
+      setEmail("");
+      alert(
+        `Your subscription request was successfully mail will be sent to ${email} `
+      );
+      setEmail("");
+    } catch (error) {
+      console.log("response error", error.response);
+    }
+    setLoading(false);
+  };
   return (
     <div>
       <div
@@ -44,10 +79,30 @@ function Footer() {
             marginBottom: 20,
           }}
         >
-          <TextField fullWidth size="small" label="Enter Your Email" />
+          <TextField
+            type="email"
+            value={email}
+            onChange={(e) => {
+              setEmail(e.target.value);
+            }}
+            fullWidth
+            size="small"
+            label="Enter Your Email"
+          />
         </div>
-        <Button style={{ marginBottom: 20 }} variant="contained">
-          Join Now
+        <Button
+          onClick={() => {
+            HandleJoinCommunity();
+          }}
+          disabled={email === ""}
+          style={{ marginBottom: 20 }}
+          variant="contained"
+        >
+          {loading ? (
+            <CircularProgress size={20} style={{ color: "#fff" }} />
+          ) : (
+            "Join Now"
+          )}
         </Button>
       </div>
       <div className={classes.root}>
@@ -66,15 +121,24 @@ function Footer() {
           <Grid item md={3.5} sm={6} xs={6}>
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
               <Typography variant="h6" fontWeight={700}>
-                Shop
+                Categorires
               </Typography>
-              <Typography variant="body2">Shirts</Typography>
-              <Typography variant="body2">Shorts</Typography>
-              <Typography variant="body2">Caps</Typography>
-              <Typography variant="body2">Glasses</Typography>
+              {[...data]?.splice(0, 5)?.map((cur, i) => (
+                // <ButtonBase key={i}>
+                <Typography
+                  sx={{ cursor: "pointer" }}
+                  onClick={() => {
+                    router.push("/collections/" + cur.id);
+                  }}
+                  variant="body2"
+                >
+                  {cur.title}
+                </Typography>
+                // </ButtonBase>
+              ))}
             </div>
           </Grid>
-          <Grid item md={3.5} sm={6} xs={6}>
+          {/* <Grid item md={3.5} sm={6} xs={6}>
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
               <Typography variant="h6" fontWeight={700}>
                 Help
@@ -83,7 +147,7 @@ function Footer() {
               <Typography variant="body2">Privacy policy</Typography>
               <Typography variant="body2">Terms of services</Typography>
             </div>
-          </Grid>
+          </Grid> */}
         </Grid>
       </div>
     </div>

@@ -190,3 +190,18 @@ export const sumPrices = (items) => {
 
   return total;
 };
+export const sumTotal = (items) => {
+  let total = 0;
+
+  for (const item of items) {
+    // Ensure that the 'price' property exists and is a number
+    const itemPrice = parseFloat(item?.amount);
+
+    // Add the item price to the total
+    if (!isNaN(itemPrice)) {
+      total += itemPrice;
+    }
+  }
+
+  return total;
+};

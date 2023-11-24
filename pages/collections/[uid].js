@@ -40,14 +40,14 @@ const useStyles = makeStyles({
     backgroundSize: "cover",
     padding: 15,
     minHeight: "70vh",
-    backgroundImage: `url("/img/collectionmv.png")`,
+    // backgroundImage: `url("/img/collectionmv.png")`,
 
     ["@media (min-width : 1200px)"]: {
       padding: 50,
       margin: 0,
       minHeight: "100vh",
 
-      backgroundImage: `url("/img/collectionbg.png")`,
+      // backgroundImage: `url("/img/collectionbg.png")`,
     },
   },
   center: {
@@ -116,74 +116,23 @@ function Index() {
     FetchProductByCategory();
   }, [uid]);
 
-  console.log(
-    "any",
-    uid,
-    data?.find((item) => item.id === uid)
-  );
+  // console.log(
+  //   "any",
+  //   uid,
+  //   data?.find((item) => item.id === uid)
+  // );
   const classes = useStyles();
   return (
     <MainLayout route={"collections"}>
       <div className={classes.root}>
         <div
           className={classes.header}
-          // style={{
-          //   backgroundImage: `url(${
-          //     data?.find((item) => item.id === uid || 5)?.image
-          //   })`,
-          // }}
+          style={{
+            backgroundImage: `url(${
+              [...data]?.find((item) => item.id === 4 || uid)?.image
+            })`,
+          }}
         >
-          <div className={classes.row}>
-            <TextField
-              value={uid}
-              size="small"
-              select
-              disabled
-              sx={{ minWidth: 200, background: "#f7f7f7" }}
-              // onChange={(e) => {
-              //   setId(e.target.value);
-              // }}
-            >
-              {data.map((option) => (
-                <MenuItem key={option.id} value={option.id}>
-                  {option.title}
-                </MenuItem>
-              ))}
-            </TextField>
-            <div>
-              <ButtonBase
-                style={{
-                  height: 40,
-                  width: 50,
-                  display: "flex",
-                  // flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  borderColor: "#000",
-                  borderWidth: 0.5,
-                  borderStyle: "solid",
-                  background: "#000",
-                  color: "#fff",
-                }}
-              >
-                <Typography>NGN</Typography>
-                {/* <KeyboardArrowDownIcon /> */}
-              </ButtonBase>
-            </div>
-            <Menu
-              id="basic-menu"
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleClose}
-              MenuListProps={{
-                "aria-labelledby": "basic-button",
-              }}
-            >
-              <MenuItem onClick={handleClose}>2000</MenuItem>
-              <MenuItem onClick={handleClose}>4000</MenuItem>
-              <MenuItem onClick={handleClose}>6000</MenuItem>
-            </Menu>
-          </div>
           {/* <Hidden smDown>
             <img src="/img/c1.png" className={classes.headerImage} />
           </Hidden> */}

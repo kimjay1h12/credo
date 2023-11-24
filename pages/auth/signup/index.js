@@ -1,19 +1,21 @@
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
 import {
   Button,
   ButtonBase,
+  CircularProgress,
   Divider,
   TextField,
   Typography,
-  CircularProgress,
 } from "@mui/material";
+
 import { makeStyles } from "@mui/styles";
 import { useRouter } from "next/router";
-import React from "react";
-import { useState } from "react";
-import client from "../../../api/client";
-import { signupHandler } from "../../../context/actions/auth";
-import { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { GlobalContext } from "../../../context";
+import { signupHandler } from "../../../context/actions/auth";
 
 const useStyles = makeStyles({
   root: {
@@ -52,6 +54,13 @@ const useStyles = makeStyles({
 });
 function Index() {
   const { authDispatch, authState } = useContext(GlobalContext);
+  const [showPassword, setShowPassword] = React.useState(false);
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
   // console.log("authsatat", authState);
   const [formData, setFormData] = useState({
     fullName: "",
@@ -114,9 +123,29 @@ function Index() {
                 password: e.target.value,
               });
             }}
+            id="outlined-adornment-password"
+            type={showPassword ? "text" : "password"}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                    edge="end"
+                  >
+                    {showPassword ? (
+                      <VisibilityOff style={{ color: "#000" }} />
+                    ) : (
+                      <Visibility />
+                    )}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
             label="Password"
             fullWidth
-            type="password"
+            // type="password"
             sx={{ marginBottom: 3 }}
           />
 

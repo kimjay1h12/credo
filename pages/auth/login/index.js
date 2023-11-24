@@ -11,7 +11,10 @@ import { useRouter } from "next/router";
 import React, { useContext, useState } from "react";
 import { GlobalContext } from "../../../context";
 import { signInHandler } from "../../../context/actions/auth";
-
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
 const useStyles = makeStyles({
   root: {
     height: "90vh",
@@ -48,6 +51,13 @@ const useStyles = makeStyles({
   },
 });
 function Index() {
+  const [showPassword, setShowPassword] = React.useState(false);
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
   // const router = useRouter();
   const classes = useStyles();
   const { authDispatch, authState } = useContext(GlobalContext);
@@ -92,7 +102,26 @@ function Index() {
           <TextField
             label="Password"
             fullWidth
-            type="password"
+            id="outlined-adornment-password"
+            type={showPassword ? "text" : "password"}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                    edge="end"
+                  >
+                    {showPassword ? (
+                      <VisibilityOff style={{ color: "#000" }} />
+                    ) : (
+                      <Visibility />
+                    )}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
             value={formData.password}
             onChange={(e) => {
               setFormData({

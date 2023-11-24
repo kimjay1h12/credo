@@ -10,3 +10,14 @@ export const UpdateOrderPayment = async (id, data) => {
     return false;
   }
 };
+export const UpdateOrderCheckoutPayment = async (data) => {
+  try {
+    const p = (await client.post(`/api/v1/Order/updateCheckout`, data)).data;
+
+    alert("Order added successfully");
+    return true;
+  } catch (error) {
+    console.log("Error creating products", error.response || error);
+    return false;
+  }
+};

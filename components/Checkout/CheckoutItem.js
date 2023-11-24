@@ -33,9 +33,11 @@ function CheckoutItem({ id, noOfItems, product }) {
             height: "100%",
           }}
         >
-          <div style={{ display: "flex", alignItems: "flex-start", gap: 5 }}>
-            <Typography>{product?.title}</Typography>
-            <Typography fontWeight={800}>x {product?.noOfItems}</Typography>
+          <div style={{ gap: 5 }}>
+            <Typography variant="body2">{product?.title}</Typography>
+            <Typography fontWeight={800} variant="body2">
+              Quantity : {product?.noOfItems}
+            </Typography>
           </div>
           {/* <Typography color={"#6A6A6A"}>Shipping Fee --</Typography> */}
         </div>
@@ -47,7 +49,7 @@ function CheckoutItem({ id, noOfItems, product }) {
           justifyContent: "space-between",
         }}
       >
-        <Typography fontWeight={800}>
+        <Typography fontWeight={800} variant="body2">
           {currencyFormatter(product?.price || product?.amount)}
         </Typography>
         {/* <Typography>$10</Typography> */}

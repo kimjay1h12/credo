@@ -8,7 +8,10 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { UpdateOrderPayment } from "../../../context/actions/paymentAction";
+import {
+  UpdateOrderCheckoutPayment,
+  UpdateOrderPayment,
+} from "../../../context/actions/paymentAction";
 import { makeStyles } from "@mui/styles";
 import { usePaystackPayment } from "react-paystack";
 
@@ -17,6 +20,7 @@ import { useRouter } from "next/router";
 import {
   currencyFormatter,
   generateRandomTransactionReference,
+  sumTotal,
 } from "../../../utility";
 import { useContext } from "react";
 import { GlobalContext } from "../../../context";
@@ -41,6 +45,7 @@ function Index() {
   useEffect(() => {
     if (data) setProduct(JSON?.parse(data));
   }, [data]);
+  console.log(product, "product");
   // console.log(new Date().toString());
   const [paystackConfig, setPaystackConfig] = useState({
     // reference: new Date().getTime().toString(),
@@ -53,13 +58,28 @@ function Index() {
   const initializePayment = usePaystackPayment(paystackConfig);
   // const [loading, setloading] = useState(second)
   const onSuccess = async (reference) => {
-    const res = await UpdateOrderPayment(product.id, {
-      paymentMethod: paymentMethod,
-      paymentReference: reference?.trans?.toString(),
-      paymentStatus: "paid",
-    });
-    if (res) {
-      router.push("/");
+    if (!product?.length > 0) {
+      const res = await UpdateOrderPayment(product.id, {
+        paymentMethod: paymentMethod,
+        paymentReference: reference?.trans?.toString(),
+        paymentStatus: "paid",
+      });
+      if (res) {
+        router.push("/");
+      }
+    } else {
+      const res = await UpdateOrderCheckoutPayment({
+        orderId: product.map((cur) => {
+          return cur.id;
+        }),
+
+        paymentMethod: paymentMethod,
+        paymentReference: reference?.trans?.toString(),
+        paymentStatus: "paid",
+      });
+      if (res) {
+        router.push("/");
+      }
     }
   };
   const onClose = () => {};
@@ -171,7 +191,13 @@ function Index() {
               <Typography>Order Summary</Typography>
 
               <div>
-                <CheckoutItem product={product} />
+                {!product?.length > 0 ? (
+                  <CheckoutItem product={product} />
+                ) : (
+                  product?.map((cur, i) => (
+                    <CheckoutItem key={i} product={cur} />
+                  ))
+                )}
                 <Divider />
                 <div>
                   <div
@@ -184,7 +210,9 @@ function Index() {
                   >
                     <Typography color={"#6A6A6A"}>SubTotal</Typography>
                     <Typography fontWeight={700}>
-                      {currencyFormatter(product?.amount)}
+                      {!product?.length > 0
+                        ? currencyFormatter(product?.amount)
+                        : currencyFormatter(sumTotal(product))}
                     </Typography>
                   </div>
                   <div
@@ -198,7 +226,9 @@ function Index() {
                   >
                     <Typography color={"#6A6A6A"}>Total</Typography>
                     <Typography fontWeight={700}>
-                      {currencyFormatter(product?.amount)}
+                      {!product?.length > 0
+                        ? currencyFormatter(product?.amount)
+                        : currencyFormatter(sumTotal(product))}
                     </Typography>
                   </div>
                 </div>
@@ -226,8 +256,13 @@ function Index() {
                 setPaystackConfig({
                   ...paystackConfig,
                   reference: generateRandomTransactionReference(),
-                  email: product?.billingInfo?.emailAddress,
-                  amount: product?.amount * 100,
+                  email:
+                    product?.billingInfo?.emailAddress ||
+                    product[0]?.billingInfo?.emailAddress,
+                  amount:
+                    !product?.length > 0
+                      ? product?.amount * 100
+                      : sumTotal(product) * 100,
                 });
               } else {
                 if (paymentMethod === "bitcoin") {

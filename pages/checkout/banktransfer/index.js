@@ -19,7 +19,10 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { useEffect } from "react";
 import { uploadHelmper } from "../../../utility";
-import { UpdateOrderPayment } from "../../../context/actions/paymentAction";
+import {
+  UpdateOrderCheckoutPayment,
+  UpdateOrderPayment,
+} from "../../../context/actions/paymentAction";
 const useStyles = makeStyles({
   container: {
     padding: 15,
@@ -79,14 +82,30 @@ function Index() {
   };
   const HandleCreateOrder = async () => {
     setLoading(true);
-    const res = await UpdateOrderPayment(product.id, {
-      paymentMethod: product?.paymentMethod,
+    if (!product?.length > 0) {
+      const res = await UpdateOrderPayment(product.id, {
+        paymentMethod: paymentMethod,
+        paymentProofUrl: imageUrl,
+        paymentReference: reference?.trans?.toString(),
+        paymentStatus: "paid",
+      });
+      if (res) {
+        router.push("/");
+      }
+    } else {
+      const res = await UpdateOrderCheckoutPayment({
+        orderId: product.map((cur) => {
+          return cur.id;
+        }),
 
-      paymentStatus: "paid",
-      paymentProofUrl: imageUrl,
-    });
-    if (res) {
-      router.push("/");
+        paymentMethod: paymentMethod,
+        paymentProofUrl: imageUrl,
+        // paymentReference: "",
+        paymentStatus: "paid",
+      });
+      if (res) {
+        router.push("/");
+      }
     }
     setLoading(false);
   };

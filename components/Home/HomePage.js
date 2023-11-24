@@ -11,6 +11,8 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { getAllCollections } from "../../context/actions/collectionAction";
 import { getRandomItems } from "../../utility";
 import { useRouter } from "next/router";
+import client from "../../api/client";
+import { useState } from "react";
 const useStyles = makeStyles({
   root: {},
   header: {
