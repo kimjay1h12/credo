@@ -29,7 +29,7 @@ const useStyles = makeStyles({
   wrapper: {
     padding: 15,
     ["@media (min-width : 1200px)"]: {
-      padding: 70,
+      padding: 50,
     },
     marginBottom: 30,
     marginTop: 20,
@@ -148,9 +148,14 @@ function HomePage() {
           </Typography>
         </div>
         <div className={classes.wrapper}>
-          <Grid container spacing={{ xs: 2, md: 6 }}>
+          <Grid
+            container
+            spacing={{ xs: 2, md: 6 }}
+            // flexWrap={"wrap"}
+            // justifyContent={"center"}
+          >
             {getRandomItems([...data], 8)?.map((cur, i) => (
-              <Grid item key={i} sm={6} xs={6} md={2.5}>
+              <Grid item key={i} sm={6} xs={6} md={2.4}>
                 <ProductsItem {...cur} />
               </Grid>
             ))}
@@ -205,7 +210,7 @@ function HomePage() {
         <div className={classes.wrapper}>
           <Grid container spacing={{ xs: 2, md: 6 }}>
             {getRandomItems([...data], 8)?.map((cur, i) => (
-              <Grid item key={i} sm={6} xs={6} md={2.5}>
+              <Grid item key={i} sm={6} xs={6} md={2.4}>
                 <ProductsItem {...cur} />
               </Grid>
             ))}

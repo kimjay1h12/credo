@@ -135,7 +135,7 @@ function Index() {
           <div className={classes.wrapper}>
             <Grid container spacing={{ xs: 2, md: 6 }}>
               {data.map((cur) => (
-                <Grid item key={cur} sm={6} xs={6} md={2.5}>
+                <Grid item key={cur} sm={6} xs={6} md={2.4}>
                   <ProductsItem {...cur} />
                 </Grid>
               ))}
