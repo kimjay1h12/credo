@@ -8,6 +8,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import { Button, ButtonBase, Divider } from "@mui/material";
 import CartItem from "./CartItem";
 import { useRouter } from "next/router";
+import { useContext } from "react";
+import { GlobalContext } from "../../context";
 const useStyles = makeStyles({
   dialogPaper: {
     position: "absolute",
@@ -32,7 +34,10 @@ const useStyles = makeStyles({
 });
 
 const TopRightDialog = ({ open, onClose, message, data }) => {
-  console.log("cartState", data);
+  // console.log("cartState", data);
+  const {
+    authState: { loggedIn },
+  } = useContext(GlobalContext);
   const classes = useStyles();
   const router = useRouter();
   return (
@@ -61,17 +66,19 @@ const TopRightDialog = ({ open, onClose, message, data }) => {
             <CartItem key={i} {...cur} />
           ))}
 
-          <Button
-            size="large"
-            sx={{ marginTop: 4 }}
-            fullWidth
-            variant="contained"
-            onClick={() => {
-              router.push("/checkout/");
-            }}
-          >
-            Checkout
-          </Button>
+          {loggedIn && (
+            <Button
+              size="large"
+              sx={{ marginTop: 4 }}
+              fullWidth
+              variant="contained"
+              onClick={() => {
+                router.push("/checkout/");
+              }}
+            >
+              Checkout
+            </Button>
+          )}
         </div>
       </DialogContent>
     </Dialog>

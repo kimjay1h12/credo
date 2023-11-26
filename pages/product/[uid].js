@@ -135,7 +135,7 @@ function Index() {
 
   const classes = useStyles();
   return (
-    <MainLayout loading={loading}>
+    <MainLayout loading={loading} route={"shop"}>
       <div className={classes.root}>
         <div className={classes.header}>
           <Grid container spacing={6}>
@@ -216,29 +216,31 @@ function Index() {
                   >
                     {cartLoading ? <CircularProgress /> : "ADD TO CART"}
                   </Button>
-                  <Button
-                    onClick={() => {
-                      if (loggedIn) {
-                        router.push({
-                          pathname: "/checkout",
-                          query: {
-                            data: JSON.stringify({
-                              ...productDetails,
-                              size: selectedSize,
-                              noOfItems: quantity,
-                            }),
-                          },
-                        });
-                      } else {
-                        router.push("/auth/login");
-                      }
-                    }}
-                    size="large"
-                    fullWidth
-                    variant="contained"
-                  >
-                    Buy Now
-                  </Button>
+                  {loggedIn && (
+                    <Button
+                      onClick={() => {
+                        if (loggedIn) {
+                          router.push({
+                            pathname: "/checkout",
+                            query: {
+                              data: JSON.stringify({
+                                ...productDetails,
+                                size: selectedSize,
+                                noOfItems: quantity,
+                              }),
+                            },
+                          });
+                        } else {
+                          router.push("/auth/login");
+                        }
+                      }}
+                      size="large"
+                      fullWidth
+                      variant="contained"
+                    >
+                      Buy Now
+                    </Button>
+                  )}
                 </div>
                 <div>
                   <Typography mb={1} mt={3} fontWeight={600}>

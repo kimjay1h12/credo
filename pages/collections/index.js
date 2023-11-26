@@ -42,7 +42,7 @@ const useStyles = makeStyles({
     ["@media (min-width : 1200px)"]: {
       padding: 50,
       margin: 0,
-      minHeight: "100vh",
+      minHeight: "70vh",
 
       backgroundImage: `url("/img/collectionbg.png")`,
     },

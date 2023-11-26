@@ -1,4 +1,5 @@
 import client from "../../api/client";
+import { getCart } from "./cart";
 
 export const signupHandler = async (data, dispatch) => {
   dispatch({
@@ -185,6 +186,7 @@ export const logoutHandler = (dispatch) => {
     type: "LOGOUT",
   });
   localStorage.clear();
+
   return true;
 };
 

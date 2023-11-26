@@ -64,14 +64,18 @@ function Index() {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const getAllUserProducts = async (query = "price.asc") => {
+  const [query, setQuery] = useState("price.asc");
+  const [loading, setLoading] = useState(false);
+  const getAllUserProducts = async () => {
     // dispatch({
+
     //   type: "LOADING",
     // });
+    setLoading(true);
     try {
       const p = (
         await client.get(
-          `/api/v1/Product/getAllProducts?pageSize=10000&${query}`
+          `/api/v1/Product/getAllProducts?sortBy=${query}&pageSize=10000`
         )
       ).data;
       console.log(p.data);
@@ -88,14 +92,15 @@ function Index() {
       // });
       console.log("Error all products", error.response);
     }
+    setLoading(false);
   };
   useEffect(() => {
     getAllUserProducts();
-  }, []);
+  }, [query]);
 
   const classes = useStyles();
   return (
-    <MainLayout route={"shop"}>
+    <MainLayout route={"shop"} loading={loading}>
       <div className={classes.root}>
         <Typography variant="h5" fontWeight={700}>
           Shop
@@ -140,8 +145,22 @@ function Index() {
               "aria-labelledby": "basic-button",
             }}
           >
-            <MenuItem onClick={handleClose}>High</MenuItem>
-            <MenuItem onClick={handleClose}>Low</MenuItem>
+            <MenuItem
+              onClick={() => {
+                setQuery("price.asc");
+                handleClose();
+              }}
+            >
+              High
+            </MenuItem>
+            <MenuItem
+              onClick={() => {
+                setQuery("price.desc");
+                handleClose();
+              }}
+            >
+              Low
+            </MenuItem>
             {/* <MenuItem onClick={handleClose}>6000</MenuItem> */}
           </Menu>
         </div>

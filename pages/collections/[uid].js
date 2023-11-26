@@ -45,7 +45,7 @@ const useStyles = makeStyles({
     ["@media (min-width : 1200px)"]: {
       padding: 50,
       margin: 0,
-      minHeight: "100vh",
+      minHeight: "70vh",
 
       // backgroundImage: `url("/img/collectionbg.png")`,
     },
@@ -105,7 +105,7 @@ function Index() {
         const res = (
           await client.get(`/api/v1/Product/getProductsByCollection/${uid}`)
         ).data;
-        console.log("products", res);
+        // console.log("products", res);
         setProducts(res.data);
       } catch (error) {
         console.log("error fetchin product by id", error.response);

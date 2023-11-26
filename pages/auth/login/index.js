@@ -72,7 +72,7 @@ function Index() {
     setLoading(true);
     const res = await signInHandler(formData, authDispatch);
     if (res) {
-      router.push("/");
+      router.back();
     }
     setLoading(false);
   };
