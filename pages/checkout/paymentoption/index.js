@@ -64,9 +64,12 @@ function Index() {
         paymentReference: reference?.trans?.toString(),
         paymentStatus: "paid",
       });
-      if (res) {
-        router.push("/");
-      }
+      router.push({
+        pathname: "/payment/success",
+        query: {
+          data: JSON.stringify(product),
+        },
+      });
     } else {
       const res = await UpdateOrderCheckoutPayment({
         orderId: product.map((cur) => {
@@ -78,7 +81,12 @@ function Index() {
         paymentStatus: "paid",
       });
       if (res) {
-        router.push("/");
+        router.push({
+          pathname: "/payment/success",
+          query: {
+            data: JSON.stringify(product),
+          },
+        });
       }
     }
   };

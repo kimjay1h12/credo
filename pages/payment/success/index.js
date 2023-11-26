@@ -10,6 +10,12 @@ import {
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import CheckoutItem from "../../../components/Checkout/CheckoutItem";
+import { useState } from "react";
+import { useEffect } from "react";
+import { Router, useRouter } from "next/router";
+import { useContext } from "react";
+import { GlobalContext } from "../../../context";
+import { currencyFormatter, sumPrices } from "../../../utility";
 const useStyles = makeStyles({
   container: {
     padding: 15,
@@ -33,7 +39,17 @@ const useStyles = makeStyles({
   },
 });
 function Index() {
+  const { cartState } = useContext(GlobalContext);
+  const router = useRouter();
   const classes = useStyles();
+  const [product, setProduct] = useState({});
+  const { data } = router.query;
+  // console.log(JSON?.parse(data));
+  // const product = JSON?.parse(data);
+  useEffect(() => {
+    if (data) setProduct(JSON?.parse(data));
+  }, [data]);
+  console.log(product, "product");
   return (
     <CheckoutLayout>
       <div>
@@ -68,23 +84,31 @@ function Index() {
                     <Typography gutterBottom color={"#aaa"}>
                       Contact Information
                     </Typography>
-                    <Typography>08123456789</Typography>
+                    <Typography>{product?.billingInfo?.phoneNumber}</Typography>
                   </div>
                   <div>
                     <Typography gutterBottom color={"#aaa"}>
-                      Payment Method
+                      Email
                     </Typography>
-                    <Typography>PayStack</Typography>
+                    <Typography>
+                      {product?.billingInfo?.emailAddress}
+                    </Typography>
                   </div>
                 </div>
                 <div>
                   <Typography color={"#aaa"} gutterBottom>
                     Shipping Address
                   </Typography>
-                  <Typography gutterBottom>21 Ajah street</Typography>
-                  <Typography gutterBottom>zalom way</Typography>
-                  <Typography gutterBottom>Ikeja</Typography>
-                  <Typography gutterBottom>Lagos</Typography>
+                  <Typography gutterBottom>
+                    {product?.billingInfo?.address}
+                  </Typography>
+                  <Typography gutterBottom>
+                    {product?.billingInfo?.state}
+                  </Typography>
+                  <Typography gutterBottom>
+                    {product?.billingInfo?.city}
+                  </Typography>
+                  {/* <Typography gutterBottom>Lagos</Typography> */}
                 </div>
               </div>
             </div>
@@ -97,7 +121,16 @@ function Index() {
               <Typography>Order Summary</Typography>
 
               <div>
-                <CheckoutItem />
+                {Object.keys(product).length != 0 ? (
+                  <CheckoutItem product={product} />
+                ) : (
+                  [...cartState?.data]?.map((cur, i) => (
+                    <CheckoutItem
+                      product={{ ...cur, ...cur.product }}
+                      key={i}
+                    />
+                  ))
+                )}
                 <Divider />
                 <div>
                   <div
@@ -109,7 +142,14 @@ function Index() {
                     }}
                   >
                     <Typography color={"#6A6A6A"}>SubTotal</Typography>
-                    <Typography fontWeight={700}>$1000</Typography>
+                    <Typography fontWeight={700}>
+                      {Object.keys(product).length != 0
+                        ? currencyFormatter(product?.amount)
+                        : currencyFormatter(
+                            cartState.data.length > 0 &&
+                              sumPrices(cartState?.data)
+                          )}
+                    </Typography>
                   </div>
                   <div
                     style={{
@@ -121,7 +161,14 @@ function Index() {
                     }}
                   >
                     <Typography color={"#6A6A6A"}>Total</Typography>
-                    <Typography fontWeight={700}>$1010</Typography>
+                    <Typography fontWeight={700}>
+                      {Object.keys(product).length != 0
+                        ? currencyFormatter(product?.amount)
+                        : currencyFormatter(
+                            cartState.data.length > 0 &&
+                              sumPrices(cartState?.data)
+                          )}
+                    </Typography>
                   </div>
                 </div>
                 <Divider />
@@ -142,6 +189,9 @@ function Index() {
             size="large"
             style={{ width: 300, marginBottom: 20 }}
             variant="contained"
+            onClick={() => {
+              router.push("/shop");
+            }}
           >
             Continue Shopping
           </Button>

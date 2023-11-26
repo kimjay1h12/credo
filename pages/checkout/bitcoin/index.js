@@ -91,7 +91,12 @@ function Index() {
         paymentStatus: "paid",
       });
       if (res) {
-        router.push("/");
+        router.push({
+          pathname: "/payment/success",
+          query: {
+            data: JSON.stringify(product),
+          },
+        });
       }
     } else {
       const res = await UpdateOrderCheckoutPayment({
@@ -105,7 +110,12 @@ function Index() {
         paymentStatus: "paid",
       });
       if (res) {
-        router.push("/");
+        router.push({
+          pathname: "/payment/success",
+          query: {
+            data: JSON.stringify(product),
+          },
+        });
       }
     }
     setLoading(false);
