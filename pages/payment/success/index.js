@@ -84,14 +84,18 @@ function Index() {
                     <Typography gutterBottom color={"#aaa"}>
                       Contact Information
                     </Typography>
-                    <Typography>{product?.billingInfo?.phoneNumber}</Typography>
+                    <Typography>
+                      {product?.billingInfo?.phoneNumber ||
+                        product[0]?.billingInfo?.phoneNumber}
+                    </Typography>
                   </div>
                   <div>
                     <Typography gutterBottom color={"#aaa"}>
                       Email
                     </Typography>
                     <Typography>
-                      {product?.billingInfo?.emailAddress}
+                      {product?.billingInfo?.emailAddress ||
+                        product[0]?.billingInfo?.emailAddress}
                     </Typography>
                   </div>
                 </div>
@@ -100,13 +104,16 @@ function Index() {
                     Shipping Address
                   </Typography>
                   <Typography gutterBottom>
-                    {product?.billingInfo?.address}
+                    {product?.billingInfo?.address ||
+                      product[0]?.billingInfo?.address}
                   </Typography>
                   <Typography gutterBottom>
-                    {product?.billingInfo?.state}
+                    {product?.billingInfo?.state ||
+                      product[0]?.billingInfo?.state}
                   </Typography>
                   <Typography gutterBottom>
-                    {product?.billingInfo?.city}
+                    {product?.billingInfo?.city ||
+                      product[0]?.billingInfo?.city}
                   </Typography>
                   {/* <Typography gutterBottom>Lagos</Typography> */}
                 </div>
@@ -121,7 +128,7 @@ function Index() {
               <Typography>Order Summary</Typography>
 
               <div>
-                {Object.keys(product).length != 0 ? (
+                {product?.amount != undefined ? (
                   <CheckoutItem product={product} />
                 ) : (
                   [...cartState?.data]?.map((cur, i) => (
@@ -143,7 +150,7 @@ function Index() {
                   >
                     <Typography color={"#6A6A6A"}>SubTotal</Typography>
                     <Typography fontWeight={700}>
-                      {Object.keys(product).length != 0
+                      {product?.amount != undefined
                         ? currencyFormatter(product?.amount)
                         : currencyFormatter(
                             cartState.data.length > 0 &&
@@ -162,7 +169,7 @@ function Index() {
                   >
                     <Typography color={"#6A6A6A"}>Total</Typography>
                     <Typography fontWeight={700}>
-                      {Object.keys(product).length != 0
+                      {product?.amount != undefined
                         ? currencyFormatter(product?.amount)
                         : currencyFormatter(
                             cartState.data.length > 0 &&

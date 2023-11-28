@@ -52,7 +52,7 @@ const useStyles = makeStyles({
     borderWidth: 0.8,
     borderColor: "#aaa",
     borderStyle: "solid",
-    minHeight: 220,
+    minHeight: 250,
     width: "100%",
     padding: 36,
   },
@@ -113,7 +113,7 @@ function Index() {
         router.push({
           pathname: "/payment/success",
           query: {
-            data: JSON.stringify(product),
+            data: JSON.stringify([...product]),
           },
         });
       }
@@ -136,7 +136,13 @@ function Index() {
                 to the following BTC wallet NOTE we will confirm all payments
                 before processing your order.
               </Typography>
-              <Typography mt={4}>BTC wallet : 02x345783839y53u97d</Typography>
+              <Typography style={{ width: 300 }} mt={4}>
+                BTC wallet : bc1qwpf2xgxer27lg75dk2lrkpwtxfpvf9vhzun420
+              </Typography>
+              <img
+                src="/img/btc.jpeg"
+                style={{ height: 200, width: 200, objectFit: "contain" }}
+              />
             </div>
             <Typography mt={4}>Proof of payment</Typography>
             {imageUrl != "" && (

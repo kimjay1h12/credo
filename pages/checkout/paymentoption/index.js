@@ -274,26 +274,51 @@ function Index() {
                 });
               } else {
                 if (paymentMethod === "bitcoin") {
-                  router.push({
-                    pathname: "/checkout/bitcoin",
-                    query: {
-                      data: JSON.stringify(
-                        [...product]
-                        // paymentMethod: paymentMethod,
-                      ),
-                    },
-                  });
+                  if (product?.length > 0) {
+                    router.push({
+                      pathname: "/checkout/bitcoin",
+                      query: {
+                        data: JSON.stringify(
+                          [...product]
+                          // paymentMethod: paymentMethod,
+                        ),
+                      },
+                    });
+                  } else {
+                    router.push({
+                      pathname: "/checkout/bitcoin",
+                      query: {
+                        data: JSON.stringify(
+                          product
+                          // paymentMethod: paymentMethod,
+                        ),
+                      },
+                    });
+                  }
                 } else {
-                  router.push({
-                    pathname: "/checkout/banktransfer",
-                    query: {
-                      data: JSON.stringify(
-                        [...product]
+                  if (product?.length > 0) {
+                    router.push({
+                      pathname: "/checkout/banktransfer",
+                      query: {
+                        data: JSON.stringify(
+                          [...product]
 
-                        // paymentMethod: paymentMethod,
-                      ),
-                    },
-                  });
+                          // paymentMethod: paymentMethod,
+                        ),
+                      },
+                    });
+                  } else {
+                    router.push({
+                      pathname: "/checkout/banktransfer",
+                      query: {
+                        data: JSON.stringify(
+                          product
+
+                          // paymentMethod: paymentMethod,
+                        ),
+                      },
+                    });
+                  }
                 }
               }
             }}

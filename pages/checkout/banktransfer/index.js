@@ -135,9 +135,11 @@ function Index() {
                 to $1 and we will confirm all payments before processing your
                 order.
               </Typography>
-              <Typography mt={4}>Name: Jimoh Akeem Olawale</Typography>
-              <Typography> Account Number: 9065764742</Typography>
-              <Typography>Bank Name: PalmPay</Typography>
+              <Typography mt={4}>
+                Name: credo culture owned by MAYOWA OLADOKUN
+              </Typography>
+              <Typography> Account Number: 6353982201</Typography>
+              <Typography>Bank Name: Moniepoint MFB</Typography>
             </div>
             <Typography mt={4}>Proof of payment</Typography>
             {imageUrl != "" && (
