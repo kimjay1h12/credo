@@ -23,6 +23,8 @@ import {
   UpdateOrderCheckoutPayment,
   UpdateOrderPayment,
 } from "../../../context/actions/paymentAction";
+import { useContext } from "react";
+import { GlobalContext } from "../../../context";
 const useStyles = makeStyles({
   container: {
     padding: 15,
@@ -60,6 +62,7 @@ const useStyles = makeStyles({
 function Index() {
   const router = useRouter();
   const classes = useStyles();
+  const { productState, paymentState } = useContext(GlobalContext);
   const [product, setProduct] = useState({});
   const { data } = router.query;
   // console.log(JSON?.parse(data));
@@ -136,10 +139,15 @@ function Index() {
                 order.
               </Typography>
               <Typography mt={4}>
-                Name: credo culture owned by MAYOWA OLADOKUN
+                Name: {paymentState?.data[0]?.accountName}
               </Typography>
-              <Typography> Account Number: 6353982201</Typography>
-              <Typography>Bank Name: Moniepoint MFB</Typography>
+              <Typography>
+                {" "}
+                Account Number: {paymentState?.data[0]?.accountNumber}
+              </Typography>
+              <Typography>
+                Bank Name: {paymentState?.data[0]?.bankName}
+              </Typography>
             </div>
             <Typography mt={4}>Proof of payment</Typography>
             {imageUrl != "" && (

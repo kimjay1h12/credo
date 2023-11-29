@@ -17,6 +17,7 @@ import {
 } from "@mui/material";
 import { createAdminCategory } from "../../../../context/actions/categoryAction";
 import { GlobalContext } from "../../../../context";
+import { useRouter } from "next/router";
 const useStyles = makeStyles({
   root: {
     padding: 50,
@@ -33,7 +34,7 @@ function Index() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
   const isImage = (file) => file && file.type.startsWith("image/");
-
+  const router = useRouter();
   const [title, setTitle] = useState("");
   const [loading, setLoading] = useState(false);
   const { cartDispatch, cartegoryDispatch } = useContext(GlobalContext);
@@ -45,6 +46,7 @@ function Index() {
     });
     if (res) {
       alert("Category Created Successfully");
+      Router.back();
     }
     setLoading(false);
   };

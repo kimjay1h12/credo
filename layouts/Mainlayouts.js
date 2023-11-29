@@ -16,6 +16,7 @@ import { getCart } from "../context/actions/cart";
 import { getAllCategory } from "../context/actions/categoryAction";
 import { getAllCollections } from "../context/actions/collectionAction";
 import { getCurrentUser } from "../context/actions/auth";
+import { GetPaymentInfo } from "../context/actions/paymentAction";
 
 const useStyles = makeStyles({
   loading: {
@@ -57,6 +58,7 @@ function MainLayout({
     cartegoryDispatch,
     adminProductsDispatch,
     authDispatch,
+    paymentDispatch,
   } = useContext(GlobalContext);
   // const { cartState } = useContext(GlobalContext);
   useEffect(() => {
@@ -67,6 +69,7 @@ function MainLayout({
       getAllCollections(collectionsDispatch);
       getAllAdminProducts(adminProductsDispatch);
       getCurrentUser(authDispatch);
+      GetPaymentInfo(paymentDispatch);
     }, 500);
     // client.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
   }, []);

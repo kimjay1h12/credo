@@ -31,6 +31,8 @@ export const GlobalContext = React.createContext({
   customerDispatch: () => {},
   adminProductsState: defaultData,
   adminProductsDispatch: () => {},
+  paymentState: defaultData,
+  paymentDispatch: () => {},
 });
 
 export default function GlobalProvider({ children }) {
@@ -58,6 +60,10 @@ export default function GlobalProvider({ children }) {
   );
   const [orderState, orderDispatch] = useReducer(genericReducer, defaultData);
   const [collectionsState, collectionsDispatch] = useReducer(
+    genericReducer,
+    defaultData
+  );
+  const [paymentState, paymentDispatch] = useReducer(
     genericReducer,
     defaultData
   );
@@ -94,6 +100,8 @@ export default function GlobalProvider({ children }) {
         customerState,
         orderDispatch,
         orderState,
+        paymentDispatch,
+        paymentState,
       }}
     >
       {children}

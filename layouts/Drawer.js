@@ -39,6 +39,7 @@ import {
 } from "../context/actions/productsActions";
 import { logoutHandler } from "../context/actions/auth";
 import { getAllOrders } from "../context/actions/orderAction";
+import { GetPaymentInfo } from "../context/actions/paymentAction";
 const drawerWidth = 240;
 const routes = [
   {
@@ -84,11 +85,17 @@ const routes = [
     active: "analytic",
   },
   {
-    label: "Store Setting",
-    path: "/",
+    label: "Payment Settings",
+    path: "/dashboard/paymentsettings",
     icon: <SettingsIcon />,
-    active: "settings",
+    active: "paymentsettings",
   },
+  // {
+  //   label: "Store Setting",
+  //   path: "/",
+  //   icon: <SettingsIcon />,
+  //   active: "settings",
+  // },
 
   // {
   //   label: "Marketing",
@@ -174,6 +181,7 @@ export default function MiniDrawer({ children, active }) {
     cartegoryDispatch,
     adminProductsDispatch,
     customerDispatch,
+    paymentDispatch,
   } = React.useContext(GlobalContext);
   // const { cartState } = useContext(GlobalContext);
   React.useEffect(() => {
@@ -184,6 +192,7 @@ export default function MiniDrawer({ children, active }) {
       getAllCollections(collectionsDispatch);
       getAllAdminProducts(adminProductsDispatch);
       getAllCustomers(customerDispatch);
+      GetPaymentInfo(paymentDispatch);
     }, 500);
     // client.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
   }, [data.token]);
