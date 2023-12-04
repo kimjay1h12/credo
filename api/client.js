@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const config = {
-  baseURL: "http://api.credoculture.com.ng/",
+  baseURL: "https://credoculture.com.ng/",
 };
 
 let token;
