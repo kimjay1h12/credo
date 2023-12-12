@@ -15,7 +15,7 @@ const useStyles = makeStyles({
 function Dashboard() {
   const { collectionsState, cartegoryState, customerState, orderState } =
     useContext(GlobalContext);
-  console.log("orderState", orderState);
+  // console.log("orderState", orderState);
   const headerArray = [
     {
       label: "Customers",
